@@ -1,0 +1,62 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: KulimPark;
+  font-style: normal;
+  font-weight: 200;
+  src: url("/fonts/KulimPark-ExtraLight.otf");
+}
+
+@font-face {
+  font-family: KulimPark;
+  font-style: normal;
+  font-weight: 300;
+  src: url("/fonts/KulimPark-Light.otf");
+}
+
+@font-face {
+  font-family: KulimPark;
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/KulimPark-Regular.otf");
+}
+
+@font-face {
+  font-family: Ubuntu Sans;
+  font-style: normal;
+  font-weight: 100 800;
+  src: url("/fonts/UbuntuSans-VariableFont_wdth,wght.ttf");
+}
+
+@theme {
+  --font-heading: 'KulimPark', sans-serif;
+  --default-font-family: 'Ubuntu Sans', sans-serif;
+  --text-h1: 4rem;
+  --text-h1--line-height: 1;
+  --text-h1--font-weight: 200;
+  --text-h2: 2rem;
+  --text-h2--font-weight: 100;
+  --text-h3: 1.5rem;
+  --text-h3--font-weight: 100;
+  --color-black: #0D1821;
+}
+
+html {
+  @apply font-extralight text-gray-900;
+}
+
+h1, .h1 {
+  @apply font-heading text-h2 md:text-h1;
+}
+
+h2, .h2 {
+  @apply text-h3 font-thin md:text-h2;
+}
+
+h3, .h3 {
+  @apply text-xl font-thin md:text-h3;
+}
+
+.container {
+  @apply mx-auto py-16 px-2;
+}
