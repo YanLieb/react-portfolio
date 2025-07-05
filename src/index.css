@@ -62,5 +62,5 @@ h3, .h3 {
 }
 
 .content-wrapper {
-  @apply  py-16 px-2;
+  @apply px-2;
 }
