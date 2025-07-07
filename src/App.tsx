@@ -19,24 +19,49 @@ function App() {
       smoothTouch: 0.1
     })
 
-    const entries = gsap.utils.toArray(".menu-entry")
+    const wrapper = container.current?.querySelector(".content-wrapper") as HTMLElement
+    const wrapperWidth = wrapper?.offsetWidth;
+    const wrapperHeight = wrapper?.offsetHeight;
 
-    if (entries && entries.length > 0) {
-      entries.forEach(entry => {
-        const el = entry as HTMLElement;
-        const entryTop = (entries[0] as HTMLElement).getBoundingClientRect().top
+    console.log(wrapperWidth, wrapperHeight);
 
-        gsap.to(el, {
-          x: "-500px",
-          scrollTrigger: {
-            trigger: el,
-            start: `bottom ${entryTop}`,
-            end: `${window.innerHeight} top`,
-            markers: true,
-          }
-        })
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".menu-entry:first-child",
+        start: `top bottom-=150`,
+        end: `bottom top-=150`,
+        //markers: true,
+        scrub: true,
+        pin: true,
+        pinSpacing: false,
+      }
+    })
+
+    tl
+      .to(".menu-entry:first-child", {
+        x: `-${wrapperWidth && wrapperWidth / 2}px`,
       })
-    }
+      .to(".menu-entry:first-child", {
+        y: `-${wrapperHeight && wrapperHeight / 2}px`
+      })
+
+    ScrollTrigger.create({
+      trigger: ".menu-entry:nth-child(2)",
+      start: `top bottom-=100`,
+      end: "bottom top-=100",
+      pin: true,
+      pinSpacing: false,
+      //markers: true,
+    })
+
+    ScrollTrigger.create({
+      trigger: ".menu-entry:nth-child(3)",
+      start: `top bottom-=50`,
+      end: "bottom top-=50",
+      pin: true,
+      pinSpacing: false,
+      //markers: true,
+    })
 
     textApparitionAnim('h1', 'h2', '.description');
 
