@@ -1,6 +1,6 @@
 import { gsap, ScrollTrigger } from 'gsap/all'
 
-export default function scrollMenuAnim(
+function scrollMenuAnim(
  wrapperWidth: number,
  wrapperHeight: number,
  menuContainer: React.RefObject<HTMLDivElement>,
@@ -50,3 +50,5 @@ export default function scrollMenuAnim(
   console.warn(err)
  }
 }
+
+export default scrollMenuAnim;
