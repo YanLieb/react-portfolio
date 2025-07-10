@@ -3,22 +3,28 @@ import { SplitText, ScrambleTextPlugin } from 'gsap/all';
 
 gsap.registerPlugin(SplitText, ScrambleTextPlugin);
 
-async function textApparitionAnim(titleElem = 'h1', subtitleElem = 'h2', descriptionElem = '.description') {
+async function presentationAnim(container: HTMLDivElement) {
+  try {
     await document.fonts.ready;
+    const title = container?.querySelector("h1");
+    const subtitle = container?.querySelector("h2");
+    const description = container?.querySelector(".description")
 
-    const timeline = gsap.timeline();
+    if (!title || !subtitle || !description) throw new Error('Missing elements for the animation')
 
-    const splitTitle = SplitText.create(titleElem, {
+    const timeline = gsap.timeline({});
+
+    const splitTitle = SplitText.create(title, {
       type: "chars",
       charsClass: "title-char++"
     });
 
-    const splitSubtitle = SplitText.create(subtitleElem, {
+    const splitSubtitle = SplitText.create(subtitle, {
       type: "words, chars",
       wordsClass: "subtitle-word++",
     });
 
-    const splitDescription = SplitText.create(descriptionElem, {
+    const splitDescription = SplitText.create(description, {
       type: "lines"
     })
 
@@ -33,6 +39,7 @@ async function textApparitionAnim(titleElem = 'h1', subtitleElem = 'h2', descrip
         duration: 1,
         ease: "back.out"
       })
+      .addLabel('Fix broken letter spacing after split chars')
       .to(".title-char:not(.title-char1)", {
         x: -5,
       }, "<1.5")
@@ -109,9 +116,13 @@ async function textApparitionAnim(titleElem = 'h1', subtitleElem = 'h2', descrip
       .to(".description", {
         y: -45,
       }, "<0.2")
-      .addLabel("end")
-  }
+        .addLabel("end")
 
+    } catch(err) {
+     console.warn(err)
+    }
+  }
+  
   export {
-    textApparitionAnim
+    presentationAnim
   }

@@ -1,16 +1,17 @@
 import { useRef, useState, useEffect } from 'react';
 
 import { gsap } from 'gsap';
-import { ScrollSmoother } from 'gsap/ScrollSmoother';
+import { ScrollTrigger, ScrollSmoother } from 'gsap/all';
 import { useGSAP } from '@gsap/react';
 
 import MenuComponent from './components/MenuComponent/MenuComponent';
-
-import { textApparitionAnim } from './animations';
+import PresentationComponent from './components/PresentationComponent/PresentationComponent';
 
 import "./App.css";
 
-gsap.registerPlugin(ScrollSmoother)
+
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
 function App() {
  const container = useRef<HTMLDivElement>(null);
  const wrapperRef = useRef<HTMLDivElement>(null);
@@ -40,9 +41,6 @@ function App() {
    effects: true,
    smoothTouch: 0.1
   })
-
-  textApparitionAnim('h1', 'h2', '.description');
-
  }, { scope: container })
 
  return (
@@ -50,25 +48,12 @@ function App() {
    <div id="smooth-content">
     <div className="home container h-[200svh]">
      <div ref={wrapperRef} className="content-wrapper h-screen flex flex-col">
-      <div className="presentation-wrapper flex-grow-1 h-100 relative flex items-center justify-center">
-       <div className="presentation h-fit flex flex-col items-center relative">
-        <h1>Yannick Liebnau</h1>
-        <div className="subtitle-container mb-3 relative">
-         <h2 className="subtitle">Web Developer</h2>
-         <div className="opacity-0 line line1 w-16 h-px bg-gray-900 inline absolute top-1/2 left-0 translate-y-1/2"></div>
-         <div className="opacity-0 line line2 w-35 h-px bg-gray-900 inline absolute top-1/2 right-0 translate-y-1/2"></div>
-        </div>
-        <div className="description relative w-100 text-center">
-         <p>JavaScript / NodeJS / React</p>
-         <p>Prestashop / WordPress</p>
-        </div>
-       </div>
-      </div>
+      <PresentationComponent />
       <MenuComponent wrapperWidth={wrapperWidth} wrapperHeight={wrapperHeight} />
      </div>
     </div>
    </div>
-  </div >
+  </div>
  )
 }
 
