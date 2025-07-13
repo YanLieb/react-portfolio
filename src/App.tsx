@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger, ScrollSmoother } from 'gsap/all';
 import { useGSAP } from '@gsap/react';
 
+import HeaderComponent from './components/HeaderComponent/HeaderComponent';
 import MenuComponent from './components/MenuComponent/MenuComponent';
 import PresentationComponent from './components/PresentationComponent/PresentationComponent';
 
@@ -13,48 +14,49 @@ import "./App.css";
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 function App() {
- const container = useRef<HTMLDivElement>(null);
- const wrapperRef = useRef<HTMLDivElement>(null);
- const [wrapperWidth, setWrapperWidth] = useState<number>(0);
- const [wrapperHeight, setWrapperHeight] = useState<number>(0);
+  const container = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [wrapperWidth, setWrapperWidth] = useState<number>(0);
+  const [wrapperHeight, setWrapperHeight] = useState<number>(0);
 
- useEffect(() => {
-  const updateDimensions = () => {
-   if (wrapperRef.current) {
-    setWrapperWidth(wrapperRef.current.clientWidth);
-    setWrapperHeight(wrapperRef.current.clientHeight);
-   }
-  };
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (wrapperRef.current) {
+        setWrapperWidth(wrapperRef.current.clientWidth);
+        setWrapperHeight(wrapperRef.current.clientHeight);
+      }
+    };
 
-  updateDimensions();
+    updateDimensions();
 
-  window.addEventListener('resize', updateDimensions);
+    window.addEventListener('resize', updateDimensions);
 
-  return () => {
-   window.removeEventListener('resize', updateDimensions);
-  };
- }, []);
+    return () => {
+      window.removeEventListener('resize', updateDimensions);
+    };
+  }, []);
 
- useGSAP(() => {
-  ScrollSmoother.create({
-   smooth: 1,
-   effects: true,
-   smoothTouch: 0.1
-  })
- }, { scope: container })
+  useGSAP(() => {
+    ScrollSmoother.create({
+      smooth: 1,
+      effects: true,
+      smoothTouch: 0.1
+    })
+  }, { scope: container })
 
- return (
-  <div ref={container} id="smooth-wrapper">
-   <div id="smooth-content">
-    <div className="home container h-[200svh]">
-     <div ref={wrapperRef} className="content-wrapper h-screen flex flex-col">
-      <PresentationComponent />
-      <MenuComponent wrapperWidth={wrapperWidth} wrapperHeight={wrapperHeight} />
-     </div>
+  return (
+    <div ref={container} id="smooth-wrapper">
+      <HeaderComponent />
+      <div id="smooth-content">
+        <div className="home container h-[200svh]">
+          <div ref={wrapperRef} className="content-wrapper h-screen flex flex-col">
+            <PresentationComponent />
+            <MenuComponent wrapperWidth={wrapperWidth} wrapperHeight={wrapperHeight} />
+          </div>
+        </div>
+      </div>
     </div>
-   </div>
-  </div>
- )
+  )
 }
 
 export default App
