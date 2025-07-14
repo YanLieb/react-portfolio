@@ -1,4 +1,7 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default;
+}
 
 @font-face {
   font-family: KulimPark;
@@ -29,8 +32,8 @@
 }
 
 @theme {
-  --font-heading: 'KulimPark', sans-serif;
-  --default-font-family: 'Ubuntu Sans', sans-serif;
+  --font-heading: "KulimPark", sans-serif;
+  --default-font-family: "Ubuntu Sans", sans-serif;
   --text-h1: 4rem;
   --text-h1--line-height: 1;
   --text-h1--font-weight: 200;
@@ -38,22 +41,25 @@
   --text-h2--font-weight: 100;
   --text-h3: 1.5rem;
   --text-h3--font-weight: 100;
-  --color-black: #0D1821;
+  --color-black: #0d1821;
 }
 
 html {
   @apply font-extralight text-gray-900;
 }
 
-h1, .h1 {
+h1,
+.h1 {
   @apply font-heading text-h2 md:text-h1;
 }
 
-h2, .h2 {
+h2,
+.h2 {
   @apply text-h3 font-thin md:text-h2;
 }
 
-h3, .h3 {
+h3,
+.h3 {
   @apply text-xl font-thin md:text-h3;
 }
 
