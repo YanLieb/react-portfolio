@@ -3,6 +3,9 @@ import { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger, ScrollSmoother } from 'gsap/all';
 import { useGSAP } from '@gsap/react';
+import { Canvas } from '@react-three/fiber'
+import AnimatedBackground from './components/NoiseBackground/NoiseBackground'
+
 
 import HeaderComponent from './components/HeaderComponent/HeaderComponent';
 import MenuComponent from './components/MenuComponent/MenuComponent';
@@ -46,6 +49,10 @@ function App() {
 
   return (
     <div ref={container} id="smooth-wrapper">
+      <Canvas>
+        <AnimatedBackground />
+      </Canvas>
+
       <HeaderComponent />
       <div id="smooth-content">
         <div className="home container h-[200svh]">
