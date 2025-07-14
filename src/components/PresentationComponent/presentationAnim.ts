@@ -160,36 +160,34 @@ class PresentationAnimation {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: presentation,
-          // markers: true,
+          //markers: true,
           start: "top top",
           end: "bottom top",
+          toggleActions: "play none none reverse",
         }
       })
 
       tl
-        .to(presentation, {
+        .fromTo(presentation, {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+        }, {
           y: -100,
           opacity: 0,
-          duration: 0.1,
-          scrollTrigger: {
-            trigger: presentation,
-            start: "top top",
-            end: "bottom top",
-          }
+          duration: 0.5,
+          ease: "back.in"
         })
         .fromTo(logo, {
           y: -100,
           opacity: 0,
-          duration: 0.1
+          duration: 0.5
         }, {
           y: 0,
           opacity: 1,
-          scrollTrigger: {
-            trigger: logo,
-            start: "top top",
-            end: "bottom top",
-          }
-        })
+          duration: 0.5,
+          ease: "back.in"
+        }, "<")
 
     } catch (err) {
       console.warn(err)

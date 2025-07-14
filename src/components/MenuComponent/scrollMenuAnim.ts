@@ -19,7 +19,7 @@ function scrollMenuAnim(
           end: `top bottom-=${entryTop}`,
           pin: true,
           pinSpacing: false,
-          markers: true,
+          //markers: true,
         }
       })
 

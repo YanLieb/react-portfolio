@@ -51,7 +51,9 @@ function App() {
         <div className="home container h-[200svh]">
           <div ref={wrapperRef} className="content-wrapper h-screen flex flex-col">
             <PresentationComponent />
-            <MenuComponent wrapperWidth={wrapperWidth} wrapperHeight={wrapperHeight} />
+            <div className="absolute bottom-[100svh] end-0">
+              <MenuComponent wrapperWidth={wrapperWidth} wrapperHeight={wrapperHeight} />
+            </div>
           </div>
         </div>
       </div>
