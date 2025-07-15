@@ -155,7 +155,6 @@ class PresentationAnimation {
   }
 
   scroll(presentation = this.#presentation, logo = this.#logoHeader) {
-    console.log(logo)
     try {
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -166,6 +165,8 @@ class PresentationAnimation {
           toggleActions: "play none none reverse",
         }
       })
+
+      tl.clear();
 
       tl
         .fromTo(presentation, {
@@ -188,6 +189,7 @@ class PresentationAnimation {
           duration: 0.5,
           ease: "back.in"
         }, "<")
+        .restart()
 
     } catch (err) {
       console.warn(err)

@@ -1,5 +1,7 @@
 import { gsap, ScrollTrigger } from 'gsap/all'
 
+gsap.registerPlugin(ScrollTrigger);
+
 function scrollMenuAnim(
   wrapperWidth: number,
   wrapperHeight: number,
@@ -10,59 +12,35 @@ function scrollMenuAnim(
   try {
     if (!wrapperWidth || !wrapperHeight || !menuContainer || !menuEntries.length) return;
 
-    menuEntries.forEach((entry, key) => {
-      const entryTop = entry?.getBoundingClientRect().top;
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: entry,
-          start: `bottom top+=${entryTop}`,
-          end: `top bottom-=${entryTop}`,
-          pin: true,
-          pinSpacing: false,
-          //markers: true,
-        }
-      })
+    const headerMenuEntries = document.querySelectorAll(".header .menu-wrapper .menu-entry")
+    const menuContainerTop = menuContainer.current.getBoundingClientRect().top
+    console.log(menuContainerTop)
 
-      tl
-        .to(entry, {
-          x: 200,
-          opacity: 0,
-          duration: 0.5,
-          stagger: 0.5
-        })
-
-      // if (key === 0) {
-      //   const tl = gsap.timeline({
-      //     scrollTrigger: {
-      //       trigger: entry,
-      //       start: `top top+=${entryTop}`,
-      //       end: `bottom top-=${entryTop}`,
-      //       scrub: true,
-      //       pin: true,
-      //       pinSpacing: false,
-      //     }
-      //   });
-
-      //   tl
-      //     .to(entry, {
-      //       x: `-${wrapperWidth && wrapperWidth / 2}px`,
-      //     })
-      //     .to(entry, {
-      //       y: `-${wrapperHeight && wrapperHeight / 2}px`
-      //     });
-
-      // } else {
-
-      // ScrollTrigger.create({
-      //   trigger: entry,
-      //   start: `top top+=${entryTop}`,
-      //   end: `bottom top-=${entryTop}`,
-      //   pin: true,
-      //   pinSpacing: false,
-      //   markers: true,
-      // });
-      // }
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: menuContainer.current,
+        start: `top+=1 top+=${menuContainerTop}`,
+        end: `bottom+=${menuContainerTop} top+=${menuContainerTop}`,
+        toggleActions: "play none none reverse",
+        pin: true,
+        pinSpacing: false,
+        //markers: true
+      }
     });
+    tl
+      .to(menuEntries, {
+        x: 200,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.5,
+        ease: "back.in",
+      })
+      .to(headerMenuEntries, {
+        y: 0,
+        stagger: 0.1,
+        duration: 0.5,
+        ease: "back.out"
+      })
 
   } catch (err) {
     console.warn(err)

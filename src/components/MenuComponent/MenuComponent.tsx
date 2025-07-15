@@ -3,6 +3,8 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import scrollMenuAnim from './scrollMenuAnim';
 
+import MenuListComponent from '../menuListComponent/MenuListComponent';
+
 interface MenuComponentProps {
   wrapperWidth: number;
   wrapperHeight: number;
@@ -20,12 +22,8 @@ function MenuComponent({ wrapperWidth, wrapperHeight }: MenuComponentProps) {
   })
 
   return <div ref={menuContainer} className="menu-wrapper self-end">
-    <ul className="menu flex flex-col gap-5 text-right">
-      {["Projects", "About", "Contact"].map((entry, key) => (
-        <li className={`menu-entry menu-entry-${key + 1} text-xl`} key={key}>{entry}</li>
-      ))}
-    </ul>
-  </div>
+    <MenuListComponent ulClasses="menu flex flex-col gap-5 text-right" />
+  </div >
 }
 
 export default MenuComponent;
