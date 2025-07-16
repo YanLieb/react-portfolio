@@ -173,21 +173,21 @@ class PresentationAnimation {
         .fromTo(presentation, {
           y: 0,
           opacity: 1,
-          duration: 0.5,
+          duration: 0.4,
         }, {
           y: -100,
           opacity: 0,
-          duration: 0.5,
+          duration: 0.4,
           ease: "back.in"
         })
         .fromTo(logo, {
           y: -100,
           opacity: 0,
-          duration: 0.5
+          duration: 0.4
         }, {
           y: 0,
           opacity: 1,
-          duration: 0.5,
+          duration: 0.4,
           ease: "back.in"
         }, "<")
         .restart()
@@ -212,7 +212,7 @@ class PresentationAnimation {
         toggleActions: "play none none reverse",
         pin: true,
         pinSpacing: false,
-        markers: true
+        //markers: true
       }
     });
     tl

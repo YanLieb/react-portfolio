@@ -28,7 +28,6 @@ function App() {
       <HeaderComponent />
       <div id="smooth-content">
         <div className="home container">
-
           <PresentationComponent />
           <div className="projects-wrapper h-screen">
             test
