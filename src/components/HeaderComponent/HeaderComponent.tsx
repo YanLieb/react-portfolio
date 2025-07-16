@@ -1,5 +1,5 @@
 import Logo from '../../assets/yan-logo.svg?react';
-import MenuListComponent from '../menuListComponent/MenuListComponent';
+import MenuListComponent from '../menuComponent/MenuComponent';
 
 function HeaderComponent() {
   return (

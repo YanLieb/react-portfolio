@@ -23,6 +23,7 @@ class PresentationAnimation {
   init() {
     this.apparition(this.#title, this.#subtitle, this.#description)
     this.scroll(this.#container)
+    this.scrollMenu(this.#container)
   }
 
   #splitTitle(title = this.#title) {
@@ -118,7 +119,7 @@ class PresentationAnimation {
         .to(splitSubtitle.words, {
           rotateX: 90,
         }, "<0.5")
-        .fromTo(".line1", {
+        .fromTo(".logo-line--1", {
           rotateX: 90,
         }, {
           rotateX: 0,
@@ -127,7 +128,7 @@ class PresentationAnimation {
           width: 27,
           opacity: 1,
         }, "<0.4")
-        .fromTo(".line2", {
+        .fromTo(".logo-line--2", {
           rotateX: 90,
         }, {
           rotateX: 0,
@@ -136,11 +137,11 @@ class PresentationAnimation {
           width: 35,
           opacity: 1,
         }, "<")
-        .to(".line1", {
+        .to(".logo-line--1", {
           y: -75,
           x: 63,
         }, "<")
-        .to(".line2", {
+        .to(".logo-line--2", {
           y: -49,
           x: -91,
         }, "<")
@@ -159,10 +160,10 @@ class PresentationAnimation {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: presentation,
-          //markers: true,
           start: "top top",
           end: "bottom top",
           toggleActions: "play none none reverse",
+          //markers: true,
         }
       })
 
@@ -194,6 +195,40 @@ class PresentationAnimation {
     } catch (err) {
       console.warn(err)
     }
+  }
+  scrollMenu(container = this.#container) {
+    const headerMenuEntries = document.querySelectorAll(".header .menu-wrapper .menu-entry")
+    const menuContainer = container.querySelector(".presentation-menu");
+    const menuEntries = menuContainer?.querySelectorAll(".menu-entry");
+    const menuContainerTop = menuContainer?.getBoundingClientRect().top
+
+    if (!menuContainer || !menuEntries) return;
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: menuContainer,
+        start: `top+=1 top+=${menuContainerTop}`,
+        end: `bottom+=${menuContainerTop} top+=${menuContainerTop}`,
+        toggleActions: "play none none reverse",
+        pin: true,
+        pinSpacing: false,
+        markers: true
+      }
+    });
+    tl
+      .to(menuEntries, {
+        x: 200,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.5,
+        ease: "back.in",
+      })
+      .to(headerMenuEntries, {
+        y: 0,
+        stagger: 0.1,
+        duration: 0.5,
+        ease: "back.out"
+      })
   }
 }
 

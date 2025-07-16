@@ -1,9 +1,9 @@
-interface MenuListComponentProps {
+interface MenuComponentProps {
   ulClasses?: string;
   liClasses?: string;
 }
 
-export default function MenuListComponent({ ulClasses = "", liClasses = "" }: MenuListComponentProps) {
+export default function MenuComponent({ ulClasses = "", liClasses = "" }: MenuComponentProps) {
   return (
     <>
       <ul className={ulClasses}>

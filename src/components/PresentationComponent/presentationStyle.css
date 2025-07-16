@@ -1,0 +1,15 @@
+.presentation-wrapper {
+  @apply h-screen flex-grow-1 z-0 h-100 relative flex flex-col items-center justify-center;
+}
+
+.logo-line {
+  @apply h-px bg-gray-900 inline absolute top-1/2 translate-y-1/2 opacity-0;
+}
+
+.logo-line--1 {
+  @apply w-16 left-0;
+}
+
+.logo-line--2 {
+  @apply w-35 right-0;
+}

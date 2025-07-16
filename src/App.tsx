@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 
 import { gsap } from 'gsap';
 import { ScrollTrigger, ScrollSmoother } from 'gsap/all';
@@ -6,36 +6,14 @@ import { useGSAP } from '@gsap/react';
 
 
 import HeaderComponent from './components/HeaderComponent/HeaderComponent';
-import MenuComponent from './components/MenuComponent/MenuComponent';
 import PresentationComponent from './components/PresentationComponent/PresentationComponent';
 
 import "./App.css";
-
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 function App() {
   const container = useRef<HTMLDivElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const [wrapperWidth, setWrapperWidth] = useState<number>(0);
-  const [wrapperHeight, setWrapperHeight] = useState<number>(0);
-
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (wrapperRef.current) {
-        setWrapperWidth(wrapperRef.current.clientWidth);
-        setWrapperHeight(wrapperRef.current.clientHeight);
-      }
-    };
-
-    updateDimensions();
-
-    window.addEventListener('resize', updateDimensions);
-
-    return () => {
-      window.removeEventListener('resize', updateDimensions);
-    };
-  }, []);
 
   useGSAP(() => {
     ScrollSmoother.create({
@@ -49,12 +27,11 @@ function App() {
     <div ref={container} id="smooth-wrapper">
       <HeaderComponent />
       <div id="smooth-content">
-        <div className="home container h-[200svh]">
-          <div ref={wrapperRef} className="content-wrapper h-screen flex flex-col">
-            <PresentationComponent />
-            <div className="absolute bottom-[100svh] end-0">
-              <MenuComponent wrapperWidth={wrapperWidth} wrapperHeight={wrapperHeight} />
-            </div>
+        <div className="home container">
+
+          <PresentationComponent />
+          <div className="projects-wrapper h-screen">
+            test
           </div>
         </div>
       </div>
