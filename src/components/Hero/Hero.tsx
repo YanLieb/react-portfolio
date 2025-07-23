@@ -1,10 +1,10 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 
-import PresentationAnimation from './presentationAnim';
-import MenuListComponent from '../menuComponent/MenuComponent';
+import HeroAnim from './heroAnim.ts';
+import MenuListComponent from '../Menu/Menu.tsx';
 
-function PresentationComponent() {
+function Hero() {
   const presentationContainer = useRef<HTMLDivElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const subtitle = useRef<HTMLHeadingElement>(null);
@@ -12,7 +12,7 @@ function PresentationComponent() {
 
   useGSAP(() => {
     if (presentationContainer.current) {
-      const presentationAnim = new PresentationAnimation(presentationContainer.current)
+      const presentationAnim = new HeroAnim(presentationContainer.current)
       presentationAnim.init();
     }
   }, { scope: presentationContainer })
@@ -38,4 +38,4 @@ function PresentationComponent() {
   )
 }
 
-export default PresentationComponent;
+export default Hero;

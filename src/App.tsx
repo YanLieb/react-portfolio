@@ -5,8 +5,8 @@ import { ScrollTrigger, ScrollSmoother } from 'gsap/all';
 import { useGSAP } from '@gsap/react';
 
 
-import HeaderComponent from './components/HeaderComponent/HeaderComponent';
-import PresentationComponent from './components/PresentationComponent/PresentationComponent';
+import Header from './components/Header/Header.tsx';
+import Hero from './components/Hero/Hero';
 
 import "./App.css";
 
@@ -25,10 +25,10 @@ function App() {
 
   return (
     <div ref={container} id="smooth-wrapper">
-      <HeaderComponent />
+      <Header />
       <div id="smooth-content">
         <div className="home container">
-          <PresentationComponent />
+          <Hero />
           <div className="projects-wrapper h-screen">
             test
           </div>

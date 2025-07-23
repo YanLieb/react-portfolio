@@ -1,7 +1,7 @@
 import Logo from '../../assets/yan-logo.svg?react';
-import MenuListComponent from '../menuComponent/MenuComponent';
+import MenuListComponent from '../Menu/Menu.tsx';
 
-function HeaderComponent() {
+function Header() {
   return (
     <header className="header bg-white py-3 fixed top-0 left-0 right-0 m-auto z-50">
       <div className="container flex justify-between">
@@ -16,4 +16,4 @@ function HeaderComponent() {
   )
 }
 
-export default HeaderComponent;
+export default Header;

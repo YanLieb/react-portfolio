@@ -3,7 +3,7 @@ interface MenuComponentProps {
   liClasses?: string;
 }
 
-export default function MenuComponent({ ulClasses = "", liClasses = "" }: MenuComponentProps) {
+export default function Menu({ ulClasses = "", liClasses = "" }: MenuComponentProps) {
   return (
     <>
       <ul className={ulClasses}>

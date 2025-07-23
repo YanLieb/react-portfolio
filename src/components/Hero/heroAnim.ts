@@ -3,7 +3,7 @@ import { SplitText, ScrambleTextPlugin, ScrollTrigger } from 'gsap/all';
 
 gsap.registerPlugin(SplitText, ScrambleTextPlugin, ScrollTrigger);
 
-class PresentationAnimation {
+export default class HeroAnim {
   #container: HTMLDivElement;
   #title: HTMLHeadingElement | null;
   #subtitle: HTMLHeadingElement | null;
@@ -231,5 +231,3 @@ class PresentationAnimation {
       })
   }
 }
-
-export default PresentationAnimation;
