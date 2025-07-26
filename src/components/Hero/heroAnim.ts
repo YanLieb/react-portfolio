@@ -8,15 +8,15 @@ export default class HeroAnim {
   #title: HTMLHeadingElement | null;
   #subtitle: HTMLHeadingElement | null;
   #description: Element | null;
-  #presentation: HTMLDivElement | null;
+  #hero: HTMLDivElement | null;
   #logoHeader: HTMLOrSVGImageElement | null;
 
   constructor(container: HTMLDivElement) {
     this.#container = container;
-    this.#title = this.#container?.querySelector("h1");
-    this.#subtitle = this.#container?.querySelector("h2");
-    this.#description = this.#container?.querySelector(".description")
-    this.#presentation = this.#container?.querySelector(".presentation");
+    this.#title = this.#container?.querySelector(".hero__title");
+    this.#subtitle = this.#container?.querySelector(".hero__subtitle");
+    this.#description = this.#container?.querySelector(".hero__description")
+    this.#hero = this.#container?.querySelector(".hero");
     this.#logoHeader = document?.querySelector("header .logo");
   }
 
@@ -112,7 +112,7 @@ export default class HeroAnim {
           y: -5
         }, "<")
         .to(".title-char8", {
-          x: -10,
+          x: window.innerWidth > 640 ? -10 : -5,
           y: 5,
         }, "<")
         .addLabel("Subtitle Words Animation")
@@ -125,7 +125,7 @@ export default class HeroAnim {
           rotateX: 0,
           rotateZ: 62,
           x: 10,
-          width: 27,
+          width: window.innerWidth > 640 ? 27 : 20,
           opacity: 1,
         }, "<0.4")
         .fromTo(".logo-line--2", {
@@ -134,18 +134,18 @@ export default class HeroAnim {
           rotateX: 0,
           rotateZ: 90,
           x: -45,
-          width: 35,
+          width: window.innerWidth > 640 ? 35 : 25,
           opacity: 1,
         }, "<")
         .to(".logo-line--1", {
-          y: -75,
-          x: 63,
+          y: window.innerWidth > 640 ? -88 : -77,
+          x: window.innerWidth > 640 ? 117 : 76,
         }, "<")
         .to(".logo-line--2", {
-          y: -49,
-          x: -91,
+          y: window.innerWidth > 640 ? -61 : -52,
+          x: window.innerWidth > 640 ? -145 : -91,
         }, "<")
-        .to(".description", {
+        .to(".hero__description", {
           y: -45,
         }, "<0.2")
         .addLabel("end")
@@ -155,11 +155,11 @@ export default class HeroAnim {
     }
   }
 
-  scroll(presentation = this.#presentation, logo = this.#logoHeader) {
+  scroll(hero = this.#hero, logo = this.#logoHeader) {
     try {
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: presentation,
+          trigger: hero,
           start: "top top",
           end: "bottom top",
           toggleActions: "play none none reverse",
@@ -170,7 +170,7 @@ export default class HeroAnim {
       tl.clear();
 
       tl
-        .fromTo(presentation, {
+        .fromTo(hero, {
           y: 0,
           opacity: 1,
           duration: 0.4,
@@ -198,7 +198,7 @@ export default class HeroAnim {
   }
   scrollMenu(container = this.#container) {
     const headerMenuEntries = document.querySelectorAll(".header .menu-wrapper .menu-entry")
-    const menuContainer = container.querySelector(".presentation-menu");
+    const menuContainer = container.querySelector(".hero__menu");
     const menuEntries = menuContainer?.querySelectorAll(".menu-entry");
     const menuContainerTop = menuContainer?.getBoundingClientRect().top
 

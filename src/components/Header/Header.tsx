@@ -1,4 +1,4 @@
-import Logo from '../../assets/yan-logo.svg?react';
+import Logo from '../../assets/svg/yan-logo.svg?react';
 import MenuListComponent from '../Menu/Menu.tsx';
 
 function Header() {

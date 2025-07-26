@@ -1,7 +1,4 @@
 @import "tailwindcss";
-@plugin "daisyui" {
-  themes: light --default;
-}
 
 @font-face {
   font-family: KulimPark;
@@ -37,9 +34,9 @@
   --text-h1: 4rem;
   --text-h1--line-height: 1;
   --text-h1--font-weight: 200;
-  --text-h2: 2rem;
+  --text-h2: 3rem;
   --text-h2--font-weight: 100;
-  --text-h3: 1.5rem;
+  --text-h3: 2rem;
   --text-h3--font-weight: 100;
   --color-black: #0d1821;
 }
@@ -50,17 +47,17 @@ html {
 
 h1,
 .h1 {
-  @apply font-heading text-h2 md:text-h1;
+  @apply font-heading text-h2 sm:text-h1;
 }
 
 h2,
 .h2 {
-  @apply text-h3 font-thin md:text-h2;
+  @apply text-h3 font-thin sm:text-h2;
 }
 
 h3,
 .h3 {
-  @apply text-xl font-thin md:text-h3;
+  @apply text-xl font-thin sm:text-h3;
 }
 
 .container {
