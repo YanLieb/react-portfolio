@@ -1,7 +1,7 @@
 import {useRef} from 'react';
 
 import {gsap} from 'gsap';
-import {ScrollTrigger, ScrollSmoother} from 'gsap/all';
+import {ScrollTrigger, ScrollSmoother, ScrollToPlugin} from 'gsap/all';
 import {useGSAP} from '@gsap/react';
 
 
@@ -11,7 +11,7 @@ import Project from './components/Project/Project';
 
 import "./App.css";
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother, ScrollToPlugin);
 
 function App() {
 	const mainContainer = useRef<HTMLDivElement>(null);
@@ -28,9 +28,9 @@ function App() {
 
 	const getProjectsList = () => {
 		const projects = [];
-		for (let i = 0; i < 3; i++) {
+		for (let i = 1; i < 4; i++) {
 			projects.push(
-				<Project key={i}/>
+				<Project key={i} id={`project-${i}`}/>
 			);
 		}
 
@@ -38,40 +38,61 @@ function App() {
 	}
 
 	const getProjectsMenu = () => {
-		const projects = [];
-		for (let i = 0; i < 3; i++) {
-			projects.push(
+		const menu = [];
+		for (let i = 1; i < 4; i++) {
+			menu.push(
 				<div className="projects__menu-entry" key={i}>
-					<a href="">Xca Portfolio</a>
+					<a href={`#project-${i}`}>Xca Portfolio</a>
 				</div>
 			);
 		}
-		return projects;
+		return menu;
 	}
 
 	useGSAP(() => {
 		if (!projectsList.current) return;
 
-		const projects = gsap.utils.toArray('.project') as Element[];
-		const menu = projectsList.current.querySelector('.projects__menu');
+		const menu = projectsList.current.querySelector('.projects__menu') as HTMLDivElement;
+		const menuEntries = gsap.utils.toArray('.projects__menu-entry a') as HTMLDivElement[];
 
-		if (!projects.length) return;
+		console.log(menuEntries);
 
-		projects.forEach((project) => {
+		if (!menuEntries.length) return;
+
+		menuEntries.forEach((entry) => {
+			const href = entry.getAttribute('href') as string;
+
+			const project = document.querySelector(href);
+			const linkScrollTrigger = ScrollTrigger.create({
+				trigger: project,
+				start: "top top",
+			});
+
 			ScrollTrigger.create({
 				trigger: project,
 				start: 'top top',
 				end: 'bottom center',
 				scrub: true,
-				markers: true,
+				//markers: true,
 				pin: true,
 				anticipatePin: 1,
+				onToggle: self => self.isActive
+			})
+
+			entry.addEventListener('click', e => {
+				e.preventDefault();
+
+				gsap.to(window, {
+					duration: 1,
+					scrollTo: linkScrollTrigger.start,
+					overwrite: 'auto',
+				})
 			})
 		})
 
 		ScrollTrigger.create({
 			trigger: menu,
-			start: `top bottom-=${menu?.offsetHeight ?? 0}`,
+			start: `top bottom-=${menu?.offsetHeight}`,
 			end: `bottom+=${window.innerHeight} bottom-=${projectsList.current.offsetHeight}`,
 			scrub: true,
 			//markers: true,
