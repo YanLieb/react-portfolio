@@ -1,23 +1,27 @@
+import {useRef} from "react";
 import {gsap} from "gsap";
 import {ScrollTrigger, ScrollToPlugin} from "gsap/all";
 import {useGSAP} from "@gsap/react";
 
 import Project from "../Project/Project.tsx";
-import * as React from "react";
-
-type ProjectsListProps = {
-	projectsContainer: React.RefObject<HTMLDivElement | null>;
-}
+import ProjectsMenu from "../ProjectsMenu/ProjectsMenu.tsx";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-export default function ProjectsList({projectsContainer}: ProjectsListProps) {
+type ProjectsListProps = {
+	category: string;
+}
+
+export default function ProjectsList({category}: ProjectsListProps) {
+	const projectsContainer = useRef<HTMLDivElement | null>(null);
+
 	useGSAP(() => {
 		if (!projectsContainer.current) return;
 
 		const menu = projectsContainer.current.querySelector('.projects__menu') as HTMLDivElement;
-		const menuEntries = gsap.utils.toArray('.projects__menu-entry a') as HTMLDivElement[];
-
+		const menuEntries = gsap.utils.toArray<HTMLAnchorElement>(
+			menu?.querySelectorAll('.projects__menu-entry a')
+		);
 
 		if (!menuEntries.length) return;
 
@@ -25,6 +29,7 @@ export default function ProjectsList({projectsContainer}: ProjectsListProps) {
 			const href = entry.getAttribute('href') as string;
 
 			const project = document.querySelector(href);
+
 			const linkScrollTrigger = ScrollTrigger.create({
 				trigger: project,
 				start: "top top",
@@ -37,6 +42,7 @@ export default function ProjectsList({projectsContainer}: ProjectsListProps) {
 				scrub: true,
 				//markers: true,
 				pin: true,
+				pinSpacing: false,
 				anticipatePin: 1,
 				onToggle: self => self.isActive
 			})
@@ -55,19 +61,18 @@ export default function ProjectsList({projectsContainer}: ProjectsListProps) {
 		ScrollTrigger.create({
 			trigger: menu,
 			start: `top bottom-=${menu?.offsetHeight}`,
-			end: `bottom+=${window.innerHeight} bottom-=${projectsContainer.current.offsetHeight}`,
+			end: `bottom+=${projectsContainer.current?.offsetHeight - menu?.offsetHeight * 2} bottom-=${menu?.offsetHeight}`,
 			scrub: true,
-			//markers: true,
+			markers: true,
 			pin: true,
-			pinSpacing: false,
 		})
-	}, {scope: projectsContainer, dependencies: ['.project']})
+	}, {scope: projectsContainer})
 
-	const getProjectsList = () => {
+	const getProjectsList = (category: string) => {
 		const projects = [];
 		for (let i = 1; i < 4; i++) {
 			projects.push(
-				<Project key={i} id={`project-${i}`}/>
+				<Project key={i} id={`project-${category.toLowerCase()}-${i}`} category={category.toLowerCase()} />
 			);
 		}
 
@@ -75,8 +80,11 @@ export default function ProjectsList({projectsContainer}: ProjectsListProps) {
 	}
 
 	return (
-		<div className="projects__list flex flex-col items-center justify-center">
-			{getProjectsList()}
+		<div ref={projectsContainer} className={`projects__${category.toLowerCase()} relative`}>
+			<div className="projects__list flex flex-col items-center justify-center">
+				{getProjectsList(category)}
+			</div>
+			<ProjectsMenu category={category.toLowerCase()}/>
 		</div>
 	)
 }

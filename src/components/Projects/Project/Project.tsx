@@ -1,16 +1,17 @@
 type ProjectProps = {
 	id: string;
+	category: string;
 };
 
-export default function Project({ id }: ProjectProps) {
+export default function Project({ id, category }: ProjectProps) {
 	return (
-		<div id={id} className="project h-screen md:w-150 flex flex-col justify-center">
+		<div id={id} className={`project category-${category} h-screen md:w-150 flex flex-col justify-center`}>
 			<div className="project__thumbnail">
 				<img src="/img/xca-portfolio-cover.jpg" alt="Thumbnail for Xca Portfolio website"
 				     className={"max-w-full"}/>
 			</div>
 			<div className="project__header flex justify-between items-center">
-				<h3 className="project__title">Xca Portfolio</h3>
+				<h3 className="project__title">{category} Xca Portfolio</h3>
 				<div className="project__year">
 					<p>2025</p>
 				</div>
