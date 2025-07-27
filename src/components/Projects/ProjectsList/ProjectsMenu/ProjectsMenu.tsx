@@ -17,7 +17,7 @@ export default function ProjectsMenu({category}: ProjectsMenuProps) {
 	}
 
 	return (
-		<div className="projects__menu absolute pb-5 top-5 right-0 flex flex-col gap-2 text-right">
+		<div className="projects__menu absolute pb-5 top-5 right-0 flex flex-col gap-2 text-right z-10">
 			{getProjectsMenu(category)}
 		</div>
 	)
