@@ -1,0 +1,20 @@
+export default function ProjectsMenu() {
+
+	const getProjectsMenu = () => {
+		const menu = [];
+		for (let i = 1; i < 4; i++) {
+			menu.push(
+				<div className="projects__menu-entry" key={i}>
+					<a href={`#project-${i}`}>Xca Portfolio</a>
+				</div>
+			);
+		}
+		return menu;
+	}
+
+	return (
+		<div className="projects__menu absolute pb-5 top-5 right-0 flex flex-col gap-2 text-right">
+			{getProjectsMenu()}
+		</div>
+	)
+}
