@@ -3,16 +3,17 @@ import {gsap} from "gsap";
 import {ScrollTrigger, ScrollToPlugin} from "gsap/all";
 import {useGSAP} from "@gsap/react";
 
-import Project from "../Project/Project.tsx";
-import ProjectsMenu from "../ProjectsMenu/ProjectsMenu.tsx";
+import Project from "./Project/Project.tsx";
+import ProjectsMenu from "./ProjectsMenu/ProjectsMenu.tsx";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 type ProjectsListProps = {
 	category: string;
+	id: number;
 }
 
-export default function ProjectsList({category}: ProjectsListProps) {
+export default function ProjectsList({category, id}: ProjectsListProps) {
 	const projectsContainer = useRef<HTMLDivElement | null>(null);
 
 	useGSAP(() => {
@@ -63,7 +64,7 @@ export default function ProjectsList({category}: ProjectsListProps) {
 			start: `top bottom-=${menu?.offsetHeight}`,
 			end: `bottom+=${projectsContainer.current?.offsetHeight - menu?.offsetHeight * 2} bottom-=${menu?.offsetHeight}`,
 			scrub: true,
-			markers: true,
+			//markers: true,
 			pin: true,
 		})
 	}, {scope: projectsContainer})
@@ -80,7 +81,7 @@ export default function ProjectsList({category}: ProjectsListProps) {
 	}
 
 	return (
-		<div ref={projectsContainer} className={`projects__${category.toLowerCase()} relative`}>
+		<div id={`category-${id}`} ref={projectsContainer} className={`projects__${category.toLowerCase()} relative`}>
 			<div className="projects__list flex flex-col items-center justify-center">
 				{getProjectsList(category)}
 			</div>
