@@ -29,7 +29,7 @@ function App() {
 		<div ref={mainContainer} id="smooth-wrapper">
 			<Header/>
 			<div id="smooth-content">
-				<div className="home container relative">
+				<div className="home relative">
 					<Hero/>
 					<Projects/>
 				</div>

@@ -32,12 +32,19 @@ export default function Projects() {
 				start: "top top",
 			});
 
-			ScrollTrigger.create({
-				trigger: category,
-				start: 'top top',
-				end: 'bottom top',
-				markers: true,
-				onToggle: self => self.isActive
+			gsap.fromTo(category, {
+				opacity: 0,
+			}, {
+				opacity: 1,
+				scrollTrigger: {
+					trigger: category,
+					start: 'top center',
+					end: 'bottom center',
+					toggleActions: 'play none none reverse',
+					markers: true,
+					anticipatePin: 1,
+					onToggle: self => self.isActive,
+				}
 			})
 
 			entry.addEventListener('click', e => {
@@ -65,7 +72,7 @@ export default function Projects() {
 
 
 	return (
-		<div ref={categoriesContainer} className={`projects relative`}>
+		<div ref={categoriesContainer} className={`projects relative container`}>
 			{categories.map((category, index) => {
 					const id = index + 1;
 					return (
