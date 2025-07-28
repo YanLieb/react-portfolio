@@ -36,14 +36,15 @@ export default function ProjectsList({category, id}: ProjectsListProps) {
 				start: "top top",
 			});
 
+
 			ScrollTrigger.create({
 				trigger: project,
-				start: 'top top',
-				end: 'bottom center',
+				start: 'top 30%',
+				end: 'bottom top',
 				scrub: true,
 				//markers: true,
 				pin: true,
-				pinSpacing: false,
+				pinSpacing: "margin",
 				anticipatePin: 1,
 				onToggle: self => self.isActive
 			})
@@ -66,7 +67,13 @@ export default function ProjectsList({category, id}: ProjectsListProps) {
 			scrub: true,
 			//markers: true,
 			pin: true,
+			onRefresh: self => {
+				self.vars.end = `bottom+=${projectsContainer.current?.offsetHeight - menu?.offsetHeight * 2} bottom-=${menu?.offsetHeight}`
+			}
 		})
+
+		ScrollTrigger.refresh();
+
 	}, {scope: projectsContainer})
 
 	const getProjectsList = (category: string) => {

@@ -41,7 +41,7 @@ export default function Projects() {
 					start: 'top center',
 					end: 'bottom center',
 					toggleActions: 'play none none reverse',
-					markers: true,
+					//markers: true,
 					anticipatePin: 1,
 					onToggle: self => self.isActive,
 				}
@@ -58,15 +58,19 @@ export default function Projects() {
 			})
 		})
 
+
 		ScrollTrigger.create({
 			trigger: menu,
 			start: `top bottom-=${menu?.offsetHeight}`,
-			end: `bottom+=${categoriesContainer.current?.offsetHeight - menu?.offsetHeight * 2} bottom-=${menu?.offsetHeight}`,
 			scrub: true,
 			//markers: true,
 			pin: true,
-			pinSpacing: false,
+			onRefresh: self => {
+				self.vars.end = `bottom+=${categoriesContainer.current?.offsetHeight + menu?.offsetHeight} bottom-=${menu?.offsetHeight}`
+			}
 		})
+
+		ScrollTrigger.refresh()
 
 	}, {scope: categoriesContainer});
 
