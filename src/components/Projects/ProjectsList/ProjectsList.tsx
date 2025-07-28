@@ -68,6 +68,7 @@ export default function ProjectsList({category, id}: ProjectsListProps) {
 			//markers: true,
 			pin: true,
 			onRefresh: self => {
+				if (!projectsContainer.current) return;
 				self.vars.end = `bottom+=${projectsContainer.current?.offsetHeight - menu?.offsetHeight * 2} bottom-=${menu?.offsetHeight}`
 			}
 		})
