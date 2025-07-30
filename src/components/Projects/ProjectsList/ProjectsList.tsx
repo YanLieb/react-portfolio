@@ -1,7 +1,7 @@
-import {useRef} from "react";
-import {gsap} from "gsap";
-import {ScrollTrigger, ScrollToPlugin} from "gsap/all";
-import {useGSAP} from "@gsap/react";
+import { useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger, ScrollToPlugin } from "gsap/all";
+import { useGSAP } from "@gsap/react";
 
 import Project from "./Project/Project.tsx";
 import ProjectsMenu from "./ProjectsMenu/ProjectsMenu.tsx";
@@ -9,91 +9,95 @@ import ProjectsMenu from "./ProjectsMenu/ProjectsMenu.tsx";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 type ProjectsListProps = {
-	category: string;
-	id: number;
+  category: string;
+  id: number;
 }
 
-export default function ProjectsList({category, id}: ProjectsListProps) {
-	const projectsContainer = useRef<HTMLDivElement | null>(null);
+export default function ProjectsList({ category, id }: ProjectsListProps) {
+  const projectsContainer = useRef<HTMLDivElement | null>(null);
 
-	useGSAP(() => {
-		if (!projectsContainer.current) return;
+  useGSAP(() => {
+    if (!projectsContainer.current) return;
 
-		const menu = projectsContainer.current.querySelector('.projects__menu') as HTMLDivElement;
-		const menuEntries = gsap.utils.toArray<HTMLAnchorElement>(
-			menu?.querySelectorAll('.projects__menu-entry a')
-		);
+    const menu = projectsContainer.current.querySelector('.projects__menu') as HTMLDivElement;
+    const menuEntries = gsap.utils.toArray<HTMLAnchorElement>(
+      menu?.querySelectorAll('.projects__menu-entry a')
+    );
 
-		if (!menuEntries.length) return;
+    if (!menuEntries.length) return;
 
-		menuEntries.forEach((entry) => {
-			const href = entry.getAttribute('href') as string;
+    menuEntries.forEach((entry) => {
+      const href = entry.getAttribute('href') as string;
 
-			const project = document.querySelector(href);
+      const project = document.querySelector(href) as HTMLDivElement;
 
-			const linkScrollTrigger = ScrollTrigger.create({
-				trigger: project,
-				start: "top top",
-			});
+      const linkScrollTrigger = ScrollTrigger.create({
+        trigger: project,
+        start: "top top",
+      });
 
+      gsap.fromTo(project, {
+        x: window.innerWidth + project.offsetWidth,
+      }, {
+        x: `-${window.innerWidth + project.offsetWidth}px`,
+        scrollTrigger: {
+          trigger: project,
+          start: 'top 30%',
+          end: `bottom top-=${window.innerWidth}`,
+          scrub: true,
+          markers: true,
+          pin: true,
+          pinSpacing: false,
+          anticipatePin: 1,
+          onToggle: self => self.isActive
+        }
+      })
 
-			ScrollTrigger.create({
-				trigger: project,
-				start: 'top 30%',
-				end: 'bottom top',
-				scrub: true,
-				//markers: true,
-				pin: true,
-				pinSpacing: "margin",
-				anticipatePin: 1,
-				onToggle: self => self.isActive
-			})
+      entry.addEventListener('click', e => {
+        e.preventDefault();
 
-			entry.addEventListener('click', e => {
-				e.preventDefault();
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: linkScrollTrigger.start,
+          overwrite: 'auto',
+        })
+      })
+    })
 
-				gsap.to(window, {
-					duration: 1,
-					scrollTo: linkScrollTrigger.start,
-					overwrite: 'auto',
-				})
-			})
-		})
+    ScrollTrigger.create({
+      trigger: menu,
+      start: `top bottom-=${menu?.offsetHeight}`,
+      end: `bottom+=${projectsContainer.current?.offsetHeight - menu?.offsetHeight * 2} bottom-=${menu?.offsetHeight}`,
+      scrub: true,
+      //markers: true,
+      pin: true,
+      onRefresh: self => {
+        if (!projectsContainer.current) return;
+        self.vars.end = `bottom+=${projectsContainer.current?.offsetHeight - menu?.offsetHeight * 2} bottom-=${menu?.offsetHeight}`
+      }
+    })
 
-		ScrollTrigger.create({
-			trigger: menu,
-			start: `top bottom-=${menu?.offsetHeight}`,
-			end: `bottom+=${projectsContainer.current?.offsetHeight - menu?.offsetHeight * 2} bottom-=${menu?.offsetHeight}`,
-			scrub: true,
-			//markers: true,
-			pin: true,
-			onRefresh: self => {
-				if (!projectsContainer.current) return;
-				self.vars.end = `bottom+=${projectsContainer.current?.offsetHeight - menu?.offsetHeight * 2} bottom-=${menu?.offsetHeight}`
-			}
-		})
+    ScrollTrigger.refresh();
 
-		ScrollTrigger.refresh();
+  }, { scope: projectsContainer })
 
-	}, {scope: projectsContainer})
+  const getProjectsList = (category: string) => {
+    const projects = [];
+    for (let i = 1; i < 4; i++) {
+      projects.push(
+        <Project key={i} id={`project-${category.toLowerCase()}-${i}`} category={category.toLowerCase()} />
+      );
+    }
 
-	const getProjectsList = (category: string) => {
-		const projects = [];
-		for (let i = 1; i < 4; i++) {
-			projects.push(
-				<Project key={i} id={`project-${category.toLowerCase()}-${i}`} category={category.toLowerCase()} />
-			);
-		}
+    return projects;
+  }
 
-		return projects;
-	}
-
-	return (
-		<div id={`category-${id}`} ref={projectsContainer} className={`projects__${category.toLowerCase()} relative`}>
-			<div className="projects__list flex flex-col items-center justify-center">
-				{getProjectsList(category)}
-			</div>
-			<ProjectsMenu category={category.toLowerCase()}/>
-		</div>
-	)
+  return (
+    <div id={`category-${id}`} ref={projectsContainer} className={`projects__${category.toLowerCase()} relative`}>
+      <div className="projects__list flex flex-col items-center justify-center">
+        {getProjectsList(category)}
+      </div>
+      <ProjectsMenu category={category.toLowerCase()} />
+    </div>
+  )
 }
