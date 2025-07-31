@@ -15,7 +15,7 @@ function Hero() {
   }, { scope: heroContainer })
 
   return (
-    <div ref={heroContainer} className="hero__container container z-0 h-screen relative flex flex-col items-center justify-center">
+    <div ref={heroContainer} className="hero__container container z-0 h-screen relative flex flex-col items-center justify-center overflow-hidden">
       <div className="hero h-full flex flex-col justify-center self-center items-center relative">
         <h1 className="hero__title">Yannick Liebnau</h1>
         <div className="hero__subtitle__container mb-3 relative">

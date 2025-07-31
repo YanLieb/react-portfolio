@@ -27,49 +27,49 @@ export default function Projects() {
 
       const category = document.querySelector(href);
 
-      const linkScrollTrigger = ScrollTrigger.create({
-        trigger: category,
-        start: "top top",
-      });
+      // const linkScrollTrigger = ScrollTrigger.create({
+      //   trigger: category,
+      //   start: "top top",
+      // });
 
-      gsap.fromTo(category, {
-        opacity: 0,
-      }, {
-        opacity: 1,
-        scrollTrigger: {
-          trigger: category,
-          start: 'top 70%',
-          end: 'bottom top',
-          toggleActions: 'play none none reverse',
-          //markers: true,
-          anticipatePin: 1,
-          onToggle: self => self.isActive,
-        }
-      })
+      // gsap.fromTo(category, {
+      //   opacity: 0,
+      // }, {
+      //   opacity: 1,
+      //   scrollTrigger: {
+      //     trigger: category,
+      //     start: 'top 70%',
+      //     end: 'bottom top',
+      //     toggleActions: 'play none none reverse',
+      //     //markers: true,
+      //     anticipatePin: 1,
+      //     onToggle: self => self.isActive,
+      //   }
+      // })
 
-      entry.addEventListener('click', e => {
-        e.preventDefault();
+      // entry.addEventListener('click', e => {
+      //   e.preventDefault();
 
-        gsap.to(window, {
-          duration: 1,
-          scrollTo: linkScrollTrigger.start,
-          overwrite: 'auto',
-        })
-      })
+      //   gsap.to(window, {
+      //     duration: 1,
+      //     scrollTo: linkScrollTrigger.start,
+      //     overwrite: 'auto',
+      //   })
+      // })
     })
 
 
-    ScrollTrigger.create({
-      trigger: menu,
-      start: `top bottom-=${menu?.offsetHeight}`,
-      scrub: true,
-      //markers: true,
-      pin: true,
-      onRefresh: self => {
-        if (!categoriesContainer.current) return;
-        self.vars.end = `bottom+=${categoriesContainer.current.offsetHeight + menu?.offsetHeight} bottom-=${menu?.offsetHeight}`
-      }
-    })
+    // ScrollTrigger.create({
+    //   trigger: menu,
+    //   start: `top bottom-=${menu?.offsetHeight}`,
+    //   scrub: true,
+    //   //markers: true,
+    //   pin: true,
+    //   onRefresh: self => {
+    //     if (!categoriesContainer.current) return;
+    //     self.vars.end = `bottom+=${categoriesContainer.current.offsetHeight + menu?.offsetHeight} bottom-=${menu?.offsetHeight}`
+    //   }
+    // })
 
     ScrollTrigger.refresh()
 
@@ -85,7 +85,7 @@ export default function Projects() {
         )
       }
       )}
-      <div className="projects__categories-menu absolute top-0 w-full pb-5 flex gap-2 justify-center items-center">
+      {/* <div className="projects__categories-menu absolute top-0 w-full pb-5 flex gap-2 justify-center items-center">
         {categories.map((category, index) => {
           const id = index + 1;
 
@@ -96,7 +96,7 @@ export default function Projects() {
           )
         })
         }
-      </div>
+      </div> */}
     </div>
   )
 }
