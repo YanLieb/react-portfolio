@@ -1,12 +1,13 @@
 import { useRef } from "react";
 import { gsap } from "gsap";
-import { Observer, ScrollToPlugin } from "gsap/all";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
 
 import Project from "./Project/Project.tsx";
 import ProjectsMenu from "./ProjectsMenu/ProjectsMenu.tsx";
 
-gsap.registerPlugin(Observer, ScrollToPlugin);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 type ProjectsListProps = {
   category: string;
@@ -19,17 +20,26 @@ export default function ProjectsList({ category, id }: ProjectsListProps) {
   useGSAP(() => {
     if (!projectsContainer.current) return;
 
-    const projects = gsap.utils.toArray<HTMLDivElement>(
-      projectsContainer.current.querySelectorAll(".project")
-    );
+    const projectsSelector = projectsContainer.current.querySelectorAll(".project")
+    const projects = gsap.utils.toArray<HTMLDivElement>(projectsSelector);
 
-    const observer = Observer.create({
-      target: projectsContainer.current,
-      type: "wheel,touch,pointer",
-      wheelSpeed: -1,
-      tolerance: 10,
-      preventDefault: true,
-    });
+    gsap.to(projects, {
+      xPercent: -100 * (projects.length),
+      ease: "none",
+      scrollTrigger: {
+        trigger: projectsContainer.current,
+        start: "top top",
+        end: "+=100%",
+        scrub: 1,
+        pin: true,
+        //markers: true,
+        snap: {
+          snapTo: 1 / (projects.length),
+          inertia: false,
+          duration: { min: 0.1, max: 0.3 },
+        },
+      },
+    })
 
   }, { scope: projectsContainer })
 
@@ -45,8 +55,8 @@ export default function ProjectsList({ category, id }: ProjectsListProps) {
   }
 
   return (
-    <div ref={projectsContainer} id={`category-${id}`} className={`projects__${category.toLowerCase()} relative h-screen overflow-hidden`}>
-      <div className="projects__list flex h-full">
+    <div ref={projectsContainer} id={`category-${id}`} className={`projects__${category.toLowerCase()} relative overflow-hidden h-screen`}>
+      <div className="projects__list h-full flex">
         {getProjectsList(category)}
       </div>
       <ProjectsMenu category={category.toLowerCase()} />

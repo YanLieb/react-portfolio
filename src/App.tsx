@@ -17,11 +17,11 @@ function App() {
   const mainContainer = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    ScrollSmoother.create({
-      smooth: 1.5,
-      effects: true,
-      smoothTouch: 0.2
-    })
+    // ScrollSmoother.create({
+    //   smooth: 1.5,
+    //   effects: true,
+    //   smoothTouch: 0.2
+    // })
   }, { scope: mainContainer })
 
   const contactLinks = {
@@ -31,24 +31,22 @@ function App() {
 
 
   return (
-    <div ref={mainContainer} id="smooth-wrapper">
+    <div ref={mainContainer}>
       <Header />
-      <div id="smooth-content">
-        <div className="home relative">
-          <Hero />
-          <Projects />
-          <div className="contact">
-            <div className="contact__container h-screen mt-[70px] container">
-              <div className="contact__links flex flex-col items-center justify-center h-full">
-                {contactLinks && Object.entries(contactLinks).map(([name, link]) => (
-                  <div className="contact__link" key={name}>
-                    <a href={link} target="_blank" rel="noopener noreferrer">
-                      {name}
-                    </a>
-                  </div>
-                )
-                )}
-              </div>
+      <div className="home relative">
+        <Hero />
+        <Projects />
+        <div className="contact">
+          <div className="contact__container h-screen mt-[70px] container">
+            <div className="contact__links flex flex-col items-center justify-center h-full">
+              {contactLinks && Object.entries(contactLinks).map(([name, link]) => (
+                <div className="contact__link" key={name}>
+                  <a href={link} target="_blank" rel="noopener noreferrer">
+                    {name}
+                  </a>
+                </div>
+              )
+              )}
             </div>
           </div>
         </div>

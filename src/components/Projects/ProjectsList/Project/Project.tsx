@@ -5,8 +5,8 @@ type ProjectProps = {
 
 export default function Project({ id, category }: ProjectProps) {
   return (
-    <div id={id} className={`project category-${category} flex-1 container h-full min-w-full flex items-center justify-center`}>
-      <div className="md:w-150 flex flex-col justify-center">
+    <div id={id} className={`project category-${category} container min-w-full h-full flex items-center justify-center bg-white`}>
+      <div className="project__container md:w-150 flex flex-col justify-center">
         <div className="project__thumbnail">
           <img src="/img/xca-portfolio-cover.jpg" alt="Thumbnail for Xca Portfolio website"
             className={"max-w-full"} />

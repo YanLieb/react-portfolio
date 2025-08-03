@@ -21,8 +21,8 @@ export default class HeroAnim {
   }
 
   init() {
-    this.apparition(this.#title, this.#subtitle, this.#description)
-    this.scroll(this.#container)
+    this.apparition()
+    //this.scroll(this.#container)
     this.scrollMenu(this.#container)
   }
 
@@ -47,9 +47,13 @@ export default class HeroAnim {
     })
   }
 
-  async apparition(title = this.#title, subtitle = this.#subtitle, description = this.#description) {
+  async apparition() {
     try {
       await document.fonts.ready;
+
+      const title: HTMLHeadingElement | null = this.#container?.querySelector(".hero__title");
+      const subtitle: HTMLHeadingElement | null = this.#container?.querySelector(".hero__subtitle");
+      const description: HTMLDivElement | null = this.#container?.querySelector(".hero__description")
 
       if (!title || !subtitle || !description) throw new Error('Missing elements for the animation')
 
@@ -163,7 +167,7 @@ export default class HeroAnim {
           start: "top top",
           end: "bottom top",
           toggleActions: "play none none reverse",
-          //markers: true,
+          markers: true,
         }
       })
 
