@@ -16,75 +16,24 @@ export default function Projects() {
   useGSAP(() => {
     if (!categoriesContainer.current) return;
 
-    const menu = categoriesContainer.current.querySelector(".projects__categories-menu") as HTMLDivElement;
-
-    if (!menu) return;
-
-    const menuEntries = gsap.utils.toArray<HTMLAnchorElement>(menu.querySelectorAll(".projects__categories-menu__item a"));
-
-    menuEntries.forEach((entry) => {
-      const href = entry.getAttribute('href') as string;
-
-      const category = document.querySelector(href);
-
-      // const linkScrollTrigger = ScrollTrigger.create({
-      //   trigger: category,
-      //   start: "top top",
-      // });
-
-      // gsap.fromTo(category, {
-      //   opacity: 0,
-      // }, {
-      //   opacity: 1,
-      //   scrollTrigger: {
-      //     trigger: category,
-      //     start: 'top 70%',
-      //     end: 'bottom top',
-      //     toggleActions: 'play none none reverse',
-      //     //markers: true,
-      //     anticipatePin: 1,
-      //     onToggle: self => self.isActive,
-      //   }
-      // })
-
-      // entry.addEventListener('click', e => {
-      //   e.preventDefault();
-
-      //   gsap.to(window, {
-      //     duration: 1,
-      //     scrollTo: linkScrollTrigger.start,
-      //     overwrite: 'auto',
-      //   })
-      // })
-    })
 
 
-    // ScrollTrigger.create({
-    //   trigger: menu,
-    //   start: `top bottom-=${menu?.offsetHeight}`,
-    //   scrub: true,
-    //   //markers: true,
-    //   pin: true,
-    //   onRefresh: self => {
-    //     if (!categoriesContainer.current) return;
-    //     self.vars.end = `bottom+=${categoriesContainer.current.offsetHeight + menu?.offsetHeight} bottom-=${menu?.offsetHeight}`
-    //   }
-    // })
 
-    ScrollTrigger.refresh()
 
   }, { scope: categoriesContainer });
 
 
   return (
     <div ref={categoriesContainer} className={`projects relative container`}>
-      {categories.map((category, index) => {
-        const id = index + 1;
-        return (
-          <ProjectsList key={id} category={category.toLowerCase()} id={id} />
+      {
+        categories.map((category, index) => {
+          const id = index + 1;
+          return (
+            <ProjectsList key={id} category={category.toLowerCase()} id={id} />
+          )
+        }
         )
       }
-      )}
       {/* <div className="projects__categories-menu absolute top-0 w-full pb-5 flex gap-2 justify-center items-center">
         {categories.map((category, index) => {
           const id = index + 1;
@@ -97,6 +46,6 @@ export default function Projects() {
         })
         }
       </div> */}
-    </div>
+    </div >
   )
 }
