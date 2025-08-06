@@ -3,7 +3,7 @@ import MenuListComponent from '../Menu/Menu.tsx';
 
 function Header() {
   return (
-    <header className="header bg-white py-3 fixed top-0 left-0 right-0 m-auto z-50">
+    <header className="header bg-white py-3 sticky top-0 m-auto z-50">
       <div className="container flex justify-between">
         <div className="logo-wrapper">
           <Logo className="logo w-10 h-auto" />

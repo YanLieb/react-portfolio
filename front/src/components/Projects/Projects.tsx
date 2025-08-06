@@ -8,7 +8,7 @@ import ProjectList from "./ProjectList";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-const CATEGORIES = ['Javascript', 'WordPress', 'Prestashop'] as const;
+const CATEGORIES = ['JavaScript', 'WordPress', 'PrestaShop'] as const;
 
 export default function Projects() {
   const projectsContainer = useRef<HTMLDivElement | null>(null);
@@ -42,8 +42,9 @@ export default function Projects() {
         id,
         category,
         categoryLower,
+        isActive: category === "JavaScript" ? true : false,
         projectsContainer: (
-          <div key={id} className={`projects__${categoryLower}`}>
+          <div key={id} className={`projects__${categoryLower} h-full`}>
             {getProjects(category)}
           </div>
         ),
@@ -60,16 +61,13 @@ export default function Projects() {
   );
 
   return (
-    <div ref={projectsContainer} className={`projects relative container`}>
-      <div className="projects__container h-full relative">
-        {categoryData.map((data) => data.projectsContainer)}
-      </div>
-      <div className="projects__menu">
-        {categoryData.map((data) => data.projectList)}
-      </div>
-      <div className="projects__categories-menu top-0 w-full pb-5 flex gap-2 justify-center items-center">
+    <div ref={projectsContainer} className={`projects relative container h-screen border border-slate-400`}>
+      {categoryData.map((data) => data.isActive && data.projectsContainer)}
+
+      <div className="projects__categories-menu flex gap-1 md:gap-2 absolute bottom-5 w-full flex-col md:flex-row md:justify-center md:items-center">
         {categoryData.map((data) => data.menuItem)}
       </div>
-    </div >
+      {categoryData.map((data) => data.isActive && data.projectList)}
+    </div>
   )
 }

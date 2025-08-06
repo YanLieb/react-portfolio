@@ -17,7 +17,7 @@ export default function ProjectList({ category }: ProjectListProps) {
   }
 
   return (
-    <div className="project-list pb-5 top-5 right-0 flex flex-col gap-2 text-right z-10">
+    <div className="project-list flex flex-col gap-1 md:gap-2 text-right absolute bottom-5 right-5">
       {getProjectList(category)}
     </div>
   )
