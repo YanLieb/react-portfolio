@@ -1,13 +1,14 @@
 import { useRef, useMemo } from "react";
 import { gsap } from "gsap";
 import { Observer } from "gsap/Observer";
+import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import Project from './Project';
 import ProjectList from "./ProjectList";
 
 const CATEGORIES = ['JavaScript', 'WordPress', 'PrestaShop'] as const;
 
-gsap.registerPlugin(Observer);
+gsap.registerPlugin(Observer, SplitText);
 export default function Projects() {
   const projectsContainer = useRef<HTMLDivElement | null>(null);
 
@@ -57,47 +58,96 @@ export default function Projects() {
     const wrap = gsap.utils.wrap(0, projects.length);
     let currentIndex = 0;
     let isAnimating = false;
-
-
-    gsap.set(projects, { xPercent: 100 })
+    gsap.set(projects, { xPercent: 100 });
     gsap.set(projects[0], { xPercent: 0 });
+    gsap.set(projects[0]?.querySelector('.project__title'), { autoAlpha: 1 });
+    gsap.set(projects[0]?.querySelector('.project__body'), { autoAlpha: 1 });
 
     const slide = (followingIndex: number) => {
       followingIndex = wrap(followingIndex);
+      isAnimating = true;
 
+      // TODO separate this calculus into new function
       const totalSlides = projects.length;
       const forwardDistance = (followingIndex - currentIndex + totalSlides) % totalSlides;
       const backwardDistance = (currentIndex - followingIndex + totalSlides) % totalSlides;
-
       const shouldGoForward = forwardDistance <= backwardDistance;
       const calculatedDirection = shouldGoForward ? -1 : 1;
 
-      isAnimating = true;
       const currentProject = projects[currentIndex];
+      const currentTitle = currentProject?.querySelector('.project__title');
+      const currentBody = currentProject?.querySelector('.project__body');
+
       const followingProject = projects[followingIndex];
+      const followingProjectTitle = followingProject?.querySelector('.project__title');
+      const followingProjectBody = followingProject?.querySelector('.project__body');
+
+      if (!currentProject || !followingProject) {
+        console.warn("No project found");
+        isAnimating = false;
+        return;
+      }
+
+      // TODO function for splitText
+      const splitCurrentTitle = new SplitText(currentTitle, { type: "words" });
+      const splitCurrentBody = new SplitText(currentBody, { type: "lines" });
+      const splitFollowingTitle = new SplitText(followingProjectTitle, { type: "words" });
+      const splitFollowingBody = new SplitText(followingProjectBody, { type: "lines" });
 
       gsap.set(followingProject, {
         xPercent: calculatedDirection === -1 ? 100 : -100
       });
+      gsap.set(splitFollowingTitle.words, {
+        y: -50,
+        autoAlpha: 0
+      });
+      gsap.set(splitFollowingBody.lines, {
+        x: -50,
+        autoAlpha: 0
+      });
 
       const tl = gsap.timeline({
         defaults: {
-          duration: 1,
-          ease: "expo.inOut"
+          ease: "back.inOut(1.7)"
         },
         onComplete: () => {
+          splitCurrentTitle.revert();
+          splitCurrentBody.revert();
+          splitFollowingTitle.revert();
+          splitFollowingBody.revert();
+
           currentIndex = followingIndex;
           isAnimating = false;
         }
       })
 
       tl
+        .to(splitCurrentTitle.words, {
+          y: -50,
+          autoAlpha: 0,
+          stagger: 0.1
+        })
+        .to(splitCurrentBody.lines, {
+          x: 50,
+          autoAlpha: 0,
+          stagger: 0.1
+        }, "<")
         .to(currentProject, {
           xPercent: 100 * calculatedDirection,
         })
         .to(followingProject, {
           xPercent: 0
-        }, 0);
+        }, "<")
+        .to(splitFollowingTitle.words, {
+          y: 0,
+          autoAlpha: 1,
+          stagger: 0.1
+        })
+        .to(splitFollowingBody.lines, {
+          x: 0,
+          autoAlpha: 1,
+          stagger: 0.1
+        }, "<")
     }
 
     Observer.create({
