@@ -19,7 +19,7 @@ function Hero() {
       <div className="hero h-full flex flex-col justify-center self-center items-center relative">
         <h1 className="hero__title">Yannick Liebnau</h1>
         <div className="hero__subtitle__container mb-3 relative">
-          <h2 className="hero__subtitle">Web Developer</h2>
+          <h2 className="hero__subtitle" data-text="Web Developer"> </h2>
           <div className="logo-line logo-line--1 h-px bg-gray-900 inline absolute top-1/2 translate-y-1/2 opacity-0 w-16 left-0"></div>
           <div className="logo-line logo-line--2 h-px bg-gray-900 inline absolute top-1/2 translate-y-1/2 opacity-0 w-35 right-0"></div>
         </div>
