@@ -178,7 +178,7 @@ export default function Projects() {
 
 
   return (
-    <div ref={projectsContainer} className={`projects relative container h-screen border border-slate-400 overflow-hidden`}>
+    <div ref={projectsContainer} className={`projects relative z-0 container h-screen overflow-hidden`}>
       <div className="projects__prev-btn absolute top-1/2 start-2 -translate-y-1/2 z-10 cursor-pointer">prev</div>
       {categoryData.map((data) => data.isActive && data.projectsContainer)}
       <div className="projects__next-btn absolute top-1/2 end-2 -translate-y-1/2 z-10 cursor-pointer">next</div>

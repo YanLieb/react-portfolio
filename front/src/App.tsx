@@ -17,11 +17,11 @@ function App() {
   const mainContainer = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    // ScrollSmoother.create({
-    //   smooth: 1.5,
-    //   effects: true,
-    //   smoothTouch: 0.2
-    // })
+    ScrollSmoother.create({
+      smooth: 1.5,
+      effects: true,
+      smoothTouch: 0.2
+    })
   }, { scope: mainContainer })
 
   const contactLinks = {
@@ -31,9 +31,9 @@ function App() {
 
 
   return (
-    <div ref={mainContainer}>
+    <div ref={mainContainer} id="smooth-wrapper">
       <Header />
-      <div className="home relative">
+      <div id="smooth-content" className="home relative">
         <Hero />
         <Projects />
         <div className="contact">
