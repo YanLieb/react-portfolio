@@ -32,12 +32,10 @@ export default class HeroAnim {
       const splitTitle = title && SplitText.create(title, {
         type: "chars, words",
       });
-      const splitSubtitle = subtitle && SplitText.create(subtitle, {
-        type: "chars",
-      });
       const splitDescription = description && SplitText.create(description, {
         type: "lines",
       });
+
 
       const tl = gsap.timeline({
         defaults: {
@@ -54,22 +52,28 @@ export default class HeroAnim {
         })
         .to(splitTitle.chars[0], {
           x: 4,
-        }, "<+=0.2")
-        .to(subtitle, {
+        }, "<0.2")
+        .to(".hero__subtitle", {
           text: subtitle.dataset.text,
-        }, "<+=1")
+        }, "<1")
         .from(splitDescription.lines[0], {
           autoAlpha: 0,
           x: -50,
           stagger: 0.5,
           ease: "back.out"
-        }, "<+=0.5")
+        }, "<0.5")
         .from(splitDescription.lines[1], {
           autoAlpha: 0,
           x: 50,
           stagger: 0.5,
           ease: "back.out"
-        }, "<+=0.5")
+        }, "<0.5")
+        .to(".hero__logo", {
+          yPercent: -150,
+          opacity: 1,
+          duration: 0.5,
+          ease: "back.out"
+        })
     } catch (err) {
       console.warn(err)
     }
