@@ -94,10 +94,11 @@ export default class HeroAnim {
   }
 
   scrollMenu() {
+    const heroMenu: HTMLDivElement | null = this.#container.querySelector('.hero__menu');
     gsap
       .to(".menu-entry", {
         x: 200,
-        opacity: 0,
+        autoAlpha: 0,
         stagger: 0.1,
         duration: 0.5,
         ease: "back.in",
@@ -106,6 +107,12 @@ export default class HeroAnim {
           start: `top 85%`,
           end: `bottom 85%`,
           toggleActions: "play none none reverse",
+          onEnter: () => {
+            heroMenu?.classList.add("isHidden")
+          },
+          onEnterBack: () => {
+            heroMenu?.classList.remove("isHidden")
+          }
         }
       })
   }

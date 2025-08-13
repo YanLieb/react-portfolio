@@ -1,22 +1,22 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 
-import HeroAnim from './heroAnim.ts';
+import HeroAnim from './HeroAnim.ts';
 import MenuListComponent from '../Menu/Menu.tsx';
 import Logo from '../../assets/svg/logo.svg?react';
 
 function Hero() {
-  const heroContainer = useRef<HTMLDivElement>(null);
+  const hero = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    if (heroContainer.current) {
-      const presentationAnim = new HeroAnim(heroContainer.current)
+    if (hero.current) {
+      const presentationAnim = new HeroAnim(hero.current)
       presentationAnim.init();
     }
-  }, { scope: heroContainer })
+  }, { scope: hero })
 
   return (
-    <div ref={heroContainer} className="hero__container container relative z-0 h-screen relative flex flex-col items-center justify-center">
+    <div ref={hero} className="hero__container container relative z-0 h-screen relative flex flex-col items-center justify-center">
       <div className="hero flex flex-col justify-center self-center items-center relative">
         <div className="hero__logo absolute start-1/2 -translate-x-1/2">
           <Logo className="w-30" />

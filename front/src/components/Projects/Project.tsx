@@ -6,8 +6,8 @@ type ProjectProps = {
 export default function Project({ id, category }: ProjectProps) {
   return (
     <div id={id} className={`project category-${category} container absolute h-full flex justify-center items-center bg-white select-none`}>
-      <div className="project__container md:w-100 flex flex-col justify-center">
-        <h2 className="project__title font-normal text-center leading-12">Xca Portfolio</h2>
+      <div className="project__container md:w-120 flex flex-col justify-center">
+        <h2 className="project__title font-normal text-center leading-12">{id} - Xca Portfolio</h2>
         <div className="project__body">
           <p>Digital designer portfolio website</p>
           <p>Built with Strapi & Next.js</p>

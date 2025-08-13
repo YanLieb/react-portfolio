@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState } from "react";
 import { gsap } from "gsap";
 import { Observer } from "gsap/Observer";
 import { SplitText } from "gsap/SplitText";
@@ -11,7 +11,7 @@ const CATEGORIES = ['JavaScript', 'WordPress', 'PrestaShop'] as const;
 gsap.registerPlugin(Observer, SplitText);
 export default function Projects() {
   const projectsContainer = useRef<HTMLDivElement | null>(null);
-
+  const [activeCategoryId, setActiveCategoryId] = useState(1);
 
   const getProjects = (category: string) => {
     const projects = [];
@@ -24,6 +24,11 @@ export default function Projects() {
     return projects;
   }
 
+  const setActiveCategory = (categoryId: number) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    setActiveCategoryId(categoryId);
+  }
+
   const categoryData = useMemo(() =>
     CATEGORIES.map((category, index) => {
       const id = index + 1;
@@ -33,7 +38,7 @@ export default function Projects() {
         id,
         category,
         categoryLower,
-        isActive: category === "JavaScript" ? true : false,
+        isActive: activeCategoryId === id,
         projectsContainer: (
           <div key={id} className={`projects__${categoryLower} h-full`}>
             {getProjects(category)}
@@ -44,12 +49,13 @@ export default function Projects() {
         ),
         menuItem: (
           <div key={id} className="projects__categories-menu__item">
-            <a href={`#category-${id}`}>{category}</a>
+            <a href={`#category-${id}`} onClick={setActiveCategory(id)}>{category}</a>
           </div>
         )
       };
-    }), []
+    }), [activeCategoryId]
   );
+
 
   useGSAP(() => {
     if (!projectsContainer.current) return;
@@ -58,6 +64,7 @@ export default function Projects() {
     const wrap = gsap.utils.wrap(0, projects.length);
     let currentIndex = 0;
     let isAnimating = false;
+
     gsap.set(projects, { xPercent: 100 });
     gsap.set(projects[0], { xPercent: 0 });
     gsap.set(projects[0]?.querySelector('.project__title'), { autoAlpha: 1 });
@@ -67,7 +74,6 @@ export default function Projects() {
       followingIndex = wrap(followingIndex);
       isAnimating = true;
 
-      // TODO separate this calculus into new function
       const totalSlides = projects.length;
       const forwardDistance = (followingIndex - currentIndex + totalSlides) % totalSlides;
       const backwardDistance = (currentIndex - followingIndex + totalSlides) % totalSlides;
@@ -88,7 +94,6 @@ export default function Projects() {
         return;
       }
 
-      // TODO function for splitText
       const splitCurrentTitle = new SplitText(currentTitle, { type: "words" });
       const splitCurrentBody = new SplitText(currentBody, { type: "lines" });
       const splitFollowingTitle = new SplitText(followingProjectTitle, { type: "words" });
@@ -102,7 +107,7 @@ export default function Projects() {
         autoAlpha: 0
       });
       gsap.set(splitFollowingBody.lines, {
-        x: -50,
+        x: shouldGoForward ? 50 : -50,
         autoAlpha: 0
       });
 
@@ -128,7 +133,7 @@ export default function Projects() {
           stagger: 0.1
         })
         .to(splitCurrentBody.lines, {
-          x: 50,
+          x: shouldGoForward ? -50 : 50,
           autoAlpha: 0,
           stagger: 0.1
         }, "<")
@@ -165,17 +170,26 @@ export default function Projects() {
         if (isAnimating) return;
 
         const target = self.event.target as HTMLElement;
-
         if (target.closest('.projects__next-btn')) {
           slide(currentIndex + 1);
         } else if (target.closest('.projects__prev-btn')) {
           slide(currentIndex - 1);
         }
+
+        const menuEntries = document.querySelectorAll('.project-list .projects__list-item');
+        menuEntries.forEach((entry, index) => {
+          if (target.closest('.projects__list-item') === entry) {
+            if (index === currentIndex) return;
+
+            slide(index);
+          }
+        });
       }
     });
 
-  }, { scope: projectsContainer });
+  }, { scope: projectsContainer, dependencies: [activeCategoryId] });
 
+  console.log(categoryData)
 
   return (
     <div ref={projectsContainer} className={`projects relative z-0 container h-screen overflow-hidden`}>
