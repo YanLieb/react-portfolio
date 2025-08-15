@@ -4,100 +4,121 @@
 
 This is a **React + TypeScript + Vite** portfolio website with **GSAP-heavy animations** and **Tailwind CSS v4**. The architecture is component-based with three main sections:
 
-1. **Hero** (`src/components/Hero/`) - Uses `ScrollSmoother` for smooth scrolling (when enabled)
-2. **Projects** (`src/components/Projects/`) - Horizontal scroll galleries with `ScrollTrigger` snap
+1. **Hero** (`src/components/Hero/`) - Complex text animations with ScrollTrigger
+2. **ProjectsList** (`src/components/Projects/`) - Multi-category horizontal sliders with GSAP Observer
 3. **Contact** - Static section with external links
 
 ## Key Technologies & Patterns
 
 ### GSAP Animation Architecture
 
-- **useGSAP hook**: Always use with `{ scope: containerRef }` for cleanup
-- **ScrollTrigger vs ScrollSmoother**: ScrollSmoother is currently disabled in `App.tsx` due to conflicts with ProjectsList snap functionality. Keep them in separate sections when both are active
-- **Animation classes**: Use private ES6 class pattern like `HeroAnim` in `heroAnim.ts`
-- **Plugin registration**: Always register GSAP plugins: `gsap.registerPlugin(ScrollTrigger, ScrollSmoother)`
+- **useGSAP hook**: Always use with `{ scope: containerRef, dependencies: [stateVar] }` for cleanup and re-initialization
+- **Animation classes**: Use private ES6 class pattern like `HeroAnim` in `HeroAnim.ts` with constructor injection
+- **Plugin registration**: Always register GSAP plugins at module level: `gsap.registerPlugin(Observer, SplitText)`
+- **ScrollTrigger positioning**: Use `start: \`-=\${window.scrollY}px\`` for scroll-position-aware triggers
 
 ```tsx
-// Standard GSAP pattern
-useGSAP(
-  () => {
-    if (!containerRef.current) return;
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top top",
-        pin: true,
-        scrub: 1,
-      },
-    });
-  },
-  { scope: containerRef }
-);
+// Standard GSAP pattern with state dependencies
+useGSAP(() => {
+  if (!containerRef.current) return;
+  // GSAP logic here
+}, { scope: containerRef, dependencies: [activeCategoryId] });
 ```
 
 ### Critical Component Patterns
 
-**ProjectsList**: Implements horizontal scroll with snap points using `gsap.utils.toArray<HTMLDivElement>('.project')` and `xPercent: -100 * (projects.length - 1)`
+**ProjectsList**: Multi-category slider with state-driven re-initialization
+- Uses `activeCategoryId` state to switch between categories (JavaScript, WordPress, PrestaShop)
+- `useMemo` with `[activeCategoryId]` dependency for category data recalculation
+- `useGSAP` with `dependencies: [activeCategoryId]` to reinitialize animations on category change
+- GSAP Observer for swipe/click interactions with duplicate prevention (`index === currentIndex`)
 
-**Hero**: Complex text animations using `SplitText`, `ScrambleTextPlugin` with font loading awareness (`await document.fonts.ready`)
+**Animation Classes**: Constructor-based pattern for complex animations
+```tsx
+// HeroAnim.ts - Class with private container field
+export default class HeroAnim {
+  #container: HTMLDivElement;
+  constructor(container: HTMLDivElement) {
+    this.#container = container;
+  }
+}
+```
 
-**Menu**: Shared component with customizable classes (`ulClasses`, `liClasses`) used in both Header and Hero
+**HeaderAnim**: Scroll-position-aware animations using `window.scrollY` offset for immediate activation
+
+### State Management Patterns
+
+**Category Switching**: Single active category pattern
+```tsx
+const [activeCategoryId, setActiveCategoryId] = useState(1);
+const setActiveCategory = (categoryId: number) => (e: React.MouseEvent) => {
+  e.preventDefault();
+  setActiveCategoryId(categoryId);
+}
+// Only category with matching ID gets isActive: true
+isActive: activeCategoryId === id
+```
+
+### GSAP Observer Interaction Patterns
+
+**Click Prevention**: Avoid duplicate actions on active elements
+```tsx
+if (target.closest('.projects__list-item') === entry) {
+  if (index === currentIndex) return; // Prevent clicking active item
+  slide(index);
+}
+```
+
+**Direction Calculation**: Intelligent shortest-path sliding
+```tsx
+const forwardDistance = (followingIndex - currentIndex + totalSlides) % totalSlides;
+const backwardDistance = (currentIndex - followingIndex + totalSlides) % totalSlides;
+const shouldGoForward = forwardDistance <= backwardDistance;
+```
 
 ### Development Workflow
 
-- **Dev server**: `npm run dev` (Vite with SWC for fast refresh)
+- **Dev server**: `npm run dev:front` (from root) or `npm run dev` (from front/)
 - **Build**: `npm run build` (TypeScript compilation + Vite build)
+- **Project structure**: Monorepo with `/front` containing React app
 - **Fonts**: Custom fonts in `/public/fonts/` with CSS `@font-face` declarations
-- **Assets**: SVGs imported as React components via `vite-plugin-svgr` (e.g., `Logo.svg?react`)
 
-### TypeScript Conventions
+### Common Issues & Solutions
 
-- **Strict mode**: All files use strict TypeScript with `noUnusedLocals`, `noUnusedParameters`
-- **Element typing**: Cast DOM queries explicitly: `document.querySelector(href) as HTMLDivElement`
-- **GSAP typing**: Use `gsap.utils.toArray<HTMLDivElement>()` for proper element typing
-- **Props**: Simple type definitions like `type ProjectsListProps = { category: string; id: number }`
-
-### Styling Architecture
-
-- **Tailwind v4**: Uses `@theme` syntax in `index.css` for custom properties
-- **BEM-like naming**: Component classes follow `component__element--modifier` pattern
-- **Responsive**: Desktop-first approach with `sm:` breakpoints
-- **Custom fonts**: KulimPark for headings, Ubuntu Sans for body text
+- **useGSAP dependencies**: Always include state variables that affect DOM structure in `dependencies` array
+- **Observer passive events**: Replace `<a>` links with clickable `<div>` + `<span>` to avoid preventDefault errors
+- **SplitText cleanup**: Call `.revert()` on SplitText instances in timeline `onComplete` callbacks
+- **Font loading**: Use `await document.fonts.ready` before complex text animations
+- **Scroll conflicts**: ScrollSmoother enabled in App.tsx, ensure no conflicts with Observer interactions
 
 ### File Organization
 
 ```
-src/
-├── components/
-│   ├── Hero/
-│   │   ├── Hero.tsx          # Component
-│   │   └── heroAnim.ts       # Animation class
-│   ├── Projects/
-│   │   ├── Projects.tsx      # Container
-│   │   └── ProjectsList/     # Nested components
-└── assets/svg/              # React-importable SVGs
+front/src/components/
+├── Hero/
+│   ├── Hero.tsx              # Component with useGSAP
+│   └── HeroAnim.ts           # Animation class
+├── Projects/
+│   ├── ProjectsList.tsx      # Main container with category state
+│   ├── Project.tsx           # Individual project component
+│   └── ProjectsMenu.tsx      # Category-specific project menu
+├── Header/
+│   ├── Header.tsx            # Component
+│   └── HeaderAnim.ts         # Animation class
+└── Menu/
+    └── Menu.tsx              # Shared menu with customizable classes
 ```
 
-### Common Issues & Solutions
+### TypeScript Conventions
 
-- **ScrollTrigger snap conflicts**: ScrollSmoother conflicts with ProjectsList snap - currently ScrollSmoother is disabled in `App.tsx`
-- **Font loading**: Use `await document.fonts.ready` before text animations
-- **GSAP cleanup**: Always use `useGSAP` with scope parameter for proper cleanup
-- **Element queries**: Scope queries to component containers, not global document
-
-### Planned Features & Architecture
-
-- **Three.js Integration**: `@react-three/fiber` prepared for 3D elements in future iterations
-- **GLSL Shaders**: `vite-plugin-glsl` configured for custom shader development (`.vert`, `.frag`, `.glsl` files)
-- **Backend API**: NodeJS backend planned for dynamic project data
-- **Data Architecture**: Currently uses hardcoded project loops, will transition to API-driven content
+- **Strict mode**: `noUnusedLocals`, `noUnusedParameters` enabled
+- **GSAP typing**: Use `gsap.utils.toArray<HTMLDivElement>()` for proper element typing
+- **Event handlers**: Curry functions for parameterized event handlers: `(id: number) => (e: React.MouseEvent) => {}`
+- **Private fields**: Use `#` syntax for private class fields
 
 ### Key Dependencies
 
-- `@gsap/react` - Official GSAP React integration
-- `vite-plugin-svgr` - SVG as React components
-- `vite-plugin-glsl` - GLSL shader support for Three.js
-- `tailwindcss` v4 - Latest Tailwind with new syntax
-- `@react-three/fiber` & `@react-three/drei` - Three.js React ecosystem
-- `three` - 3D graphics library
+- `@gsap/react` - Official GSAP React integration with useGSAP hook
+- `vite-plugin-svgr` - SVG imports as React components (`Logo.svg?react`)
+- `vite-plugin-glsl` - GLSL shader support for future Three.js integration
+- `tailwindcss` v4 - Latest Tailwind with `@theme` syntax in CSS

@@ -10,7 +10,7 @@ function Header() {
 
   useGSAP(() => {
     if (!header.current) return;
-    const headerAnim = new HeaderAnim(header.current);
+    const headerAnim = new HeaderAnim();
     headerAnim.init();
 
   }, { scope: header })

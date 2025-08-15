@@ -4,10 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 export default class HeaderAnim {
-  #container: HTMLDivElement;
 
-  constructor(container: HTMLDivElement) {
-    this.#container = container;
+  constructor() {
   }
 
   init() {
