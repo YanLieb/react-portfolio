@@ -4,7 +4,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger, ScrollSmoother } from 'gsap/all';
 import { useGSAP } from '@gsap/react';
 
-
 import Header from './components/Header/Header.tsx';
 import Hero from './components/Hero/Hero.tsx';
 import ProjectsList from './components/Projects/ProjectsList.tsx';

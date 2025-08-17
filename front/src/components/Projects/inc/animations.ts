@@ -5,7 +5,7 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(Observer, SplitText);
 
-export default function projectsListSlider(container: HTMLDivElement | null) {
+export function projectsListSlider(container: HTMLDivElement | null) {
   if (!container) return;
 
   const projects = gsap.utils.toArray<HTMLDivElement>('.project');
@@ -133,4 +133,53 @@ export default function projectsListSlider(container: HTMLDivElement | null) {
       });
     }
   });
+}
+
+export function ProjectsListScrollTrigger() {
+  gsap.set(".projects__categories-menu__item, .projects__menu-item, .project__container,.projects__prev-btn, .projects__next-btn", {
+    autoAlpha: 0,
+  });
+
+  gsap.to(".projects__categories-menu__item", {
+    autoAlpha: 1,
+    stagger: 0.1,
+    scrollTrigger: {
+      trigger: ".projects__categories-menu",
+      start: "top 95%",
+      end: "bottom 10%",
+      toggleActions: "play none none reverse",
+    }
+  })
+
+  gsap.to(".projects__menu-item", {
+    autoAlpha: 1,
+    stagger: 0.1,
+    scrollTrigger: {
+      trigger: ".projects__menu",
+      start: "top 90%",
+      end: "bottom 10%",
+      toggleActions: "play none none reverse",
+    }
+  })
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".project__container",
+      start: "top 80%",
+      end: "bottom 20%",
+      toggleActions: "play none none reverse",
+    }
+  });
+
+  tl
+    .to(".project__container", {
+      autoAlpha: 1,
+    })
+    .fromTo(".projects__next-btn, .projects__prev-btn", {
+      y: 50,
+    }, {
+      autoAlpha: 1,
+      y: 0
+    }, "<")
+
 }

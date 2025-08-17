@@ -1,24 +1,25 @@
+type ProjectData = {
+  title: string;
+  description: string;
+  infos: string;
+  link: string;
+  repo_link?: string;
+};
+
 type ProjectsMenuProps = {
-  category: string
+  category: string;
+  projects: ProjectData[];
 }
 
-export default function ProjectsMenu({ category }: ProjectsMenuProps) {
-
-  const getProjectsMenu = (category: string) => {
-    const menu = [];
-    for (let i = 1; i < 4; i++) {
-      menu.push(
-        <div className={`projects__menu-item cursor-pointer ${category.toLowerCase()}`} key={i}>
-          <span>Xca Portfolio</span>
-        </div>
-      );
-    }
-    return menu;
-  }
+export default function ProjectsMenu({ category, projects }: ProjectsMenuProps) {
 
   return (
     <div className="projects__menu flex flex-col gap-1 md:gap-2 text-right absolute bottom-5 right-2">
-      {getProjectsMenu(category)}
+      {projects.map((project, index) => (
+        <div className={`projects__menu-item cursor-pointer ${category.toLowerCase().replace(/[/\s]/g, '-')}`} key={index}>
+          <span>{project.title}</span>
+        </div>
+      ))}
     </div>
   )
 }

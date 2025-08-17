@@ -6,7 +6,7 @@ export default function Contact() {
   }
 
   return (
-    <div className="contact" >
+    <div id="contact" className="contact">
       <div className="contact__container h-screen container flex flex-col items-center">
         <div className="contact__links flex flex-col items-center justify-center h-full">
           {contactLinks && Object.entries(contactLinks).map(([name, link]) => (

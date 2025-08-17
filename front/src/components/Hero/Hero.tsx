@@ -16,7 +16,7 @@ function Hero() {
   }, { scope: hero })
 
   return (
-    <div ref={hero} className="hero__container container relative z-0 h-screen relative flex flex-col items-center justify-center">
+    <div ref={hero} id="home" className="hero__container container relative z-0 h-screen relative flex flex-col items-center justify-center">
       <div className="hero flex flex-col justify-center self-center items-center relative">
         <div className="hero__logo absolute start-1/2 -translate-x-1/2">
           <Logo className="w-30" />
@@ -31,7 +31,7 @@ function Hero() {
         </div>
       </div>
       <div className="hero__menu self-end absolute z-10 bottom-5">
-        <MenuListComponent ulClasses="menu flex flex-col gap-2 text-right" />
+        <MenuListComponent ulClasses="menu flex flex-col gap-2 text-right" dots={true} />
       </div>
     </div>
   )
