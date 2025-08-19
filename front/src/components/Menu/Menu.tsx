@@ -9,10 +9,9 @@ gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
 interface MenuComponentProps {
   ulClasses?: string;
   liClasses?: string;
-  dots?: boolean;
 }
 
-export default function Menu({ ulClasses = "", liClasses = "", dots = false }: MenuComponentProps) {
+export default function Menu({ ulClasses = "", liClasses = "" }: MenuComponentProps) {
   const menu = useRef<HTMLUListElement | null>(null);
   const [activeSection, setActiveSection] = useState("home");
 
@@ -56,13 +55,7 @@ export default function Menu({ ulClasses = "", liClasses = "", dots = false }: M
             return (
               <li className={`menu-entry menu-entry-${key + 1} text-xl ${liClasses}`} key={key}>
                 <a href={`#${entry.toLowerCase()}`} className="flex gap-2 items-center">
-                  {dots && (
-                    <span className={`block rounded-full w-1 h-1 border transition-colors ${isActive
-                      ? 'bg-gray-900 border-gray-900'
-                      : 'border-gray-300 bg-transparent'
-                      }`}></span>
-                  )}
-                  <span className={`${!dots && isActive ? 'font-normal' : ''}`}>
+                  <span className={`${isActive ? 'font-normal' : ''}`}>
                     {entry}
                   </span>
                 </a>

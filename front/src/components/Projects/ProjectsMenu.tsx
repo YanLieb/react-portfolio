@@ -9,14 +9,15 @@ type ProjectData = {
 type ProjectsMenuProps = {
   category: string;
   projects: ProjectData[];
+  currentSlideIndex: number;
 }
 
-export default function ProjectsMenu({ category, projects }: ProjectsMenuProps) {
+export default function ProjectsMenu({ category, projects, currentSlideIndex }: ProjectsMenuProps) {
 
   return (
     <div className="projects__menu flex flex-col gap-1 md:gap-2 text-right absolute bottom-5 right-2">
       {projects.map((project, index) => (
-        <div className={`projects__menu-item cursor-pointer ${category.toLowerCase().replace(/[/\s]/g, '-')}`} key={index}>
+        <div className={`projects__menu-item ${category.toLowerCase().replace(/[/\s]/g, '-')} ${index === currentSlideIndex ? 'active' : 'cursor-pointer'}`} key={index}>
           <span>{project.title}</span>
         </div>
       ))}

@@ -14,6 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function ProjectsList() {
   const projectsContainer = useRef<HTMLDivElement | null>(null);
   const [activeCategoryId, setActiveCategoryId] = useState(1);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const CATEGORIES = Object.keys(projectsData.projects) as Array<keyof typeof projectsData.projects>;
 
   const setActiveCategory = (categoryId: number) => (e: React.MouseEvent) => {
@@ -39,12 +40,13 @@ export default function ProjectsList() {
                 id={`project-${category.toLowerCase().replace(/[/\s]/g, '-')}-${index}`}
                 category={category.toLowerCase().replace(/[/\s]/g, '-')}
                 projectData={project}
+                currentSlideIndex={currentSlideIndex}
               />
             ))};
           </div>
         ),
         projectsMenu: (
-          <ProjectsMenu key={id} category={category} projects={projectsData.projects[category]} />
+          <ProjectsMenu key={id} category={category} projects={projectsData.projects[category]} currentSlideIndex={currentSlideIndex} />
         ),
         categoryMenuItem: (
           <div key={id} className="projects__categories-menu__item">
@@ -56,11 +58,13 @@ export default function ProjectsList() {
           </div>
         )
       };
-    }), [activeCategoryId]
+    }), [activeCategoryId, currentSlideIndex, CATEGORIES]
   );
 
   useGSAP(() => {
-    projectsListSlider(projectsContainer.current);
+    projectsListSlider(projectsContainer.current, (index) => {
+      setCurrentSlideIndex(index);
+    });
     ProjectsListScrollTrigger();
 
   }, { scope: projectsContainer, dependencies: [activeCategoryId] });

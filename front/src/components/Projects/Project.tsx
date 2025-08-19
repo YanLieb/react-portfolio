@@ -1,3 +1,7 @@
+import { useRef } from "react";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
+
 type ProjectData = {
   title: string;
   description: string;
@@ -10,12 +14,43 @@ type ProjectProps = {
   id: string;
   category: string;
   projectData: ProjectData;
+  currentSlideIndex: number;
 };
 
-export default function Project({ id, category, projectData }: ProjectProps) {
+export default function Project({ id, category, projectData, currentSlideIndex }: ProjectProps) {
+  const projectRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!projectRef.current) return;
+    const projectLinks: HTMLAnchorElement[] = gsap.utils.toArray(projectRef.current?.querySelectorAll('.project__link a'));
+
+    projectLinks?.forEach(link => {
+      const underlined = link?.querySelector(".underlined")
+      link?.addEventListener('mouseenter', () => {
+        gsap.to(underlined, {
+          "--width": "100%",
+          "--left": "100%",
+          ease: "expo",
+          duration: 1,
+        })
+      });
+
+      link?.addEventListener('mouseleave', () => {
+        gsap.to(underlined, {
+          "--width": "0",
+          "--left": "-100%",
+          ease: "expo",
+          duration: 1,
+        })
+      })
+    })
+
+
+  }, { scope: projectRef, dependencies: [currentSlideIndex] });
+
   return (
-    <div id={id} className={`project category-${category} absolute h-full w-full flex justify-center items-center bg-white select-none`}>
-      <div className="project__container max-w-75 md:max-w-120 flex flex-col justify-center gap-2">
+    <div id={id} ref={projectRef} className={`project category-${category} absolute h-full w-full flex justify-center items-center bg-white select-none`}>
+      <div className="project__container w-75 md:w-120 flex flex-col justify-center gap-2">
         <h2 className="project__title font-normal text-center leading-12">{projectData.title}</h2>
         <div className="project__body flex flex-col gap-1">
           <div className="project__description">
@@ -25,9 +60,10 @@ export default function Project({ id, category, projectData }: ProjectProps) {
             <p>{projectData.infos}</p>
           </div>
           <div className="project__link flex justify-end">
-            <a href={projectData.link} target="_blank"
-              className="block border border-gray-200 px-2 py-1 shadow-gray-900 transition hover:border-gray-900 hover:shadow-[-3px_3px_0] hover:translate-x-[3px] hover:translate-y-[-3px]">
-              Go to website
+            <a href={projectData.link}
+              target="_blank"
+              className="block font-normal">
+              Go to <span className="inline-flex underlined">website</span>
             </a>
           </div>
         </div>

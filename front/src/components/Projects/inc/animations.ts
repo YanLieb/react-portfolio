@@ -5,7 +5,7 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(Observer, SplitText);
 
-export function projectsListSlider(container: HTMLDivElement | null) {
+export function projectsListSlider(container: HTMLDivElement | null, onSlideChange?: (index: number) => void) {
   if (!container) return;
 
   const projects = gsap.utils.toArray<HTMLDivElement>('.project');
@@ -70,6 +70,7 @@ export function projectsListSlider(container: HTMLDivElement | null) {
         splitFollowingBody.revert();
 
         currentIndex = followingIndex;
+        onSlideChange?.(currentIndex);
         isAnimating = false;
       }
     })
@@ -124,7 +125,7 @@ export function projectsListSlider(container: HTMLDivElement | null) {
         slide(currentIndex - 1);
       }
 
-      const menuEntries = document.querySelectorAll('.projects__menu .projects__menu-item');
+      const menuEntries = document.querySelectorAll('.projects__menu .projects__menu-item:not(.active)');
       menuEntries.forEach((entry, index) => {
         if (target.closest('.projects__menu-item') === entry) {
           if (index === currentIndex) return;
