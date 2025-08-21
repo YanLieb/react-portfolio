@@ -63,3 +63,22 @@ h3,
 .container {
   @apply mx-auto px-2;
 }
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.active-project,
+.active-category {
+  font-weight: 400;
+  cursor: auto;
+  animation: blink 2000ms ease-in-out infinite;
+}

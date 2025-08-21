@@ -13,10 +13,13 @@ export function projectsListSlider(container: HTMLDivElement | null, onSlideChan
   let currentIndex = 0;
   let isAnimating = false;
 
-  gsap.set(projects, { xPercent: 100 });
   gsap.set(projects[0], { xPercent: 0 });
   gsap.set(projects[0]?.querySelector('.project__title'), { autoAlpha: 1 });
   gsap.set(projects[0]?.querySelector('.project__body'), { autoAlpha: 1 });
+  projects.slice(1).forEach(project => {
+    gsap.set(project, { xPercent: 100 });
+  });
+  console.log(projects[0])
 
   const slide = (followingIndex: number) => {
     followingIndex = wrap(followingIndex);
@@ -125,7 +128,7 @@ export function projectsListSlider(container: HTMLDivElement | null, onSlideChan
         slide(currentIndex - 1);
       }
 
-      const menuEntries = document.querySelectorAll('.projects__menu .projects__menu-item:not(.active)');
+      const menuEntries = document.querySelectorAll('.projects__menu .projects__menu-item');
       menuEntries.forEach((entry, index) => {
         if (target.closest('.projects__menu-item') === entry) {
           if (index === currentIndex) return;

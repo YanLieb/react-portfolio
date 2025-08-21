@@ -20,6 +20,7 @@ export default function ProjectsList() {
   const setActiveCategory = (categoryId: number) => (e: React.MouseEvent) => {
     e.preventDefault();
     setActiveCategoryId(categoryId);
+    setCurrentSlideIndex(0)
   }
 
   const categoryData = useMemo(() =>

@@ -17,10 +17,11 @@ export default function ProjectsMenu({ category, projects, currentSlideIndex }: 
   return (
     <div className="projects__menu flex flex-col gap-1 md:gap-2 text-right absolute bottom-5 right-2">
       {projects.map((project, index) => (
-        <div className={`projects__menu-item ${category.toLowerCase().replace(/[/\s]/g, '-')} ${index === currentSlideIndex ? 'active' : 'cursor-pointer'}`} key={index}>
-          <span>{project.title}</span>
+        <div className={`projects__menu-item ${category.toLowerCase().replace(/[/\s]/g, '-')}`} key={index}>
+          <span className={`${index === currentSlideIndex ? 'active-project' : 'cursor-pointer'}`}>{project.title}</span>
         </div>
-      ))}
-    </div>
+      ))
+      }
+    </div >
   )
 }
