@@ -49,18 +49,18 @@ export default function BubblesInContainer({
         x,
         y,
         radius: p.random(500),
-        alpha: 25,
+        alpha: 12,
         speed: p.random(0.5, 1.5),
 
         update() {
           this.radius += this.speed;
-          this.alpha *= 0.97;
+          this.alpha *= 0.99;
         },
 
         display() {
           p.noFill();
           p.stroke(strokeGray, this.alpha);
-          p.strokeWeight(1);
+          p.strokeWeight(3);
           p.ellipse(this.x, this.y, this.radius, this.radius);
         },
 
@@ -83,7 +83,7 @@ export default function BubblesInContainer({
         canvasEl.style.position = "absolute";
         canvasEl.style.inset = "0";
         canvasEl.style.zIndex = "1";
-        canvasEl.style.pointerEvents = "none"; // no bloquea clics/scroll
+        canvasEl.style.pointerEvents = "none";
         p.pixelDensity(Math.min(2, window.devicePixelRatio || 1));
         p.background(bg);
         p.noStroke();
@@ -95,9 +95,8 @@ export default function BubblesInContainer({
       p.draw = () => {
         if (!isSetupComplete) return; // Attendre que setup soit terminé
 
-        // fondo blanco semi-transparente para desvanecer
         p.fill(bg, fade);
-        p.noStroke(); // Assurer qu'il n'y a pas de stroke sur le rect
+        p.noStroke();
         p.rect(0, 0, p.width, p.height);
 
         // actualiza/dibuja burbujas
@@ -114,13 +113,12 @@ export default function BubblesInContainer({
         p.noStroke();
       };
 
-      // Equivalent de mouseMoved() en Processing
       p.mouseMoved = () => {
-        // Vérifier que le canvas est initialisé
+
         if (!isSetupComplete || !p.width || !p.height) return;
 
         if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) {
-          if (p.frameCount % 5 === 0) { // intermitente
+          if (p.frameCount % 5 === 0) {
             for (let i = 0; i < 3; i++) {
               const offsetX = p.random(-1, 1);
               const offsetY = p.random(-1, 1);

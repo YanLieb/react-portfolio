@@ -4,20 +4,20 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 export default class HeaderAnim {
+  container: HTMLDivElement;
 
-  constructor() {
+  constructor(container: HTMLDivElement) {
+    this.container = container
   }
 
   init() {
-    //this.scrollHeader();
+    this.scrollHeader();
     this.scrollLogo();
     this.scrollMenu();
   }
 
   scrollHeader() {
-    gsap.to('.container', {
-      backgroundColor: 'white',
-      boxShadow: '0 0 3px rgba(0,0,0,0.5)',
+    const tl = gsap.timeline({
       scrollTrigger: {
         trigger: ".container",
         start: `-=${window.scrollY}px`,
@@ -25,6 +25,19 @@ export default class HeaderAnim {
         toggleActions: "play none none reverse",
       }
     })
+
+    gsap.set(this.container, {
+      backgroundColor: "transparent",
+      boxShadow: "0 0 0 rgba(0,0,0,0)"
+    })
+
+    tl
+      .to(this.container, {
+        backgroundColor: 'white',
+      })
+      .to(this.container, {
+        boxShadow: '0 0 1px rgba(0,0,0,0.5)',
+      }, ">")
   }
 
   scrollLogo() {

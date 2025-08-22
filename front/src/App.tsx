@@ -31,8 +31,8 @@ export default function App() {
       <div id="smooth-content" className="home relative">
         <Bubbles
           className="cursor-anim-wrapper"
-          fade={20}
-          strokeGray={180}
+          fade={30}
+          strokeGray={230}
           bg={255}
         >
           <Hero />
