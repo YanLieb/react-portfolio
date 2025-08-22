@@ -19,8 +19,6 @@ export function projectsListSlider(container: HTMLDivElement | null, onSlideChan
   projects.slice(1).forEach(project => {
     gsap.set(project, { xPercent: 100 });
   });
-  console.log(projects[0])
-
   const slide = (followingIndex: number) => {
     followingIndex = wrap(followingIndex);
     isAnimating = true;

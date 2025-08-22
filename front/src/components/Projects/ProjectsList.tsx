@@ -72,9 +72,13 @@ export default function ProjectsList() {
 
   return (
     <div ref={projectsContainer} id="projects" className={`projects relative z-0 container h-screen overflow-hidden`}>
-      <div className="projects__prev-btn absolute left-2/3 top-4/5 md:top-1/2 md:start-2 md:-translate-y-1/2 z-10 cursor-pointer">prev</div>
+      <div className="projects__prev-btn absolute left-2/3 top-4/5 md:top-1/2 md:start-2 md:-translate-y-1/2 z-10 cursor-pointer">
+        <span className="block w-6 h-6 border border-gray-900 border-r-0 border-b-0 -rotate-45"></span>
+      </div>
       {categoryData.map((data) => data.isActive && data.projectsContainer)}
-      <div className="projects__next-btn absolute right-2/3 top-4/5 md:top-1/2 md:end-2 md:-translate-y-1/2 z-10 cursor-pointer">next</div>
+      <div className="projects__next-btn absolute right-2/3 top-4/5 md:top-1/2 md:end-2 md:-translate-y-1/2 z-10 cursor-pointer">
+        <span className="block w-6 h-6 border border-gray-900 border-r-0 border-b-0 rotate-135"></span>
+      </div>
       <div className="projects__categories-menu flex gap-1 md:gap-2 absolute bottom-5 w-full flex-col md:flex-row md:justify-center md:items-center">
         {categoryData.map((data) => data.categoryMenuItem)}
       </div>

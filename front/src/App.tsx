@@ -8,6 +8,7 @@ import Header from './components/Header/Header.tsx';
 import Hero from './components/Hero/Hero.tsx';
 import ProjectsList from './components/Projects/ProjectsList.tsx';
 import Contact from './components/Contact/Contact.tsx';
+import Bubbles from "./components/Projects/inc/Bubbles";
 
 import "./App.css";
 
@@ -28,9 +29,16 @@ export default function App() {
     <div ref={mainContainer} id="smooth-wrapper">
       <Header />
       <div id="smooth-content" className="home relative">
-        <Hero />
-        <ProjectsList />
-        <Contact />
+        <Bubbles
+          className="cursor-anim-wrapper"
+          fade={20}
+          strokeGray={180}
+          bg={255}
+        >
+          <Hero />
+          <ProjectsList />
+          <Contact />
+        </Bubbles>
       </div>
     </div>
   )

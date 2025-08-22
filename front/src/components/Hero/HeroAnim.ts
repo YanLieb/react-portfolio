@@ -66,9 +66,9 @@ export default class HeroAnim {
           x: 0,
           ease: "back.out"
         }, "<0.5")
-        .to(".hero__logo", {
-          yPercent: -120,
-          opacity: 1,
+        .to(".hero__logo svg", {
+          yPercent: -140,
+          autoAlpha: 1,
           duration: 0.5,
           ease: "back.out"
         })
@@ -80,8 +80,7 @@ export default class HeroAnim {
   scrollLogo() {
     gsap
       .to(".hero__logo", {
-        rotationX: 100,
-        transformOrigin: "50% 50% 200",
+        yPercent: 140,
         autoAlpha: 0,
         ease: "back.in",
         scrollTrigger: {

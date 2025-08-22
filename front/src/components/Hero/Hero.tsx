@@ -19,9 +19,9 @@ function Hero() {
     <div ref={hero} id="home" className="hero__container container relative z-0 h-screen flex flex-col items-center justify-center">
       <div className="hero flex flex-col justify-center self-center items-center relative">
         <div className="hero__logo absolute start-1/2 -translate-x-1/2">
-          <Logo className="w-30" />
+          <Logo className="w-30 invisible" />
         </div>
-        <div className="hero__title-container bg-white relative z-10 flex flex-col justify-center items-center">
+        <div className="hero__title-container relative z-10 flex flex-col justify-center items-center">
           <h1 className="hero__title">Yannick Liebnau</h1>
           <h2 className="hero__subtitle mb-3 h-15" data-text="Web Developer"></h2>
           <div className="hero__description relative w-100 text-center">

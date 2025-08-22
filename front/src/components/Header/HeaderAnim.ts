@@ -9,8 +9,22 @@ export default class HeaderAnim {
   }
 
   init() {
-    this.scrollMenu();
+    //this.scrollHeader();
     this.scrollLogo();
+    this.scrollMenu();
+  }
+
+  scrollHeader() {
+    gsap.to('.container', {
+      backgroundColor: 'white',
+      boxShadow: '0 0 3px rgba(0,0,0,0.5)',
+      scrollTrigger: {
+        trigger: ".container",
+        start: `-=${window.scrollY}px`,
+        end: `-=${window.scrollY}px`,
+        toggleActions: "play none none reverse",
+      }
+    })
   }
 
   scrollLogo() {
@@ -42,5 +56,4 @@ export default class HeaderAnim {
     })
 
   }
-
 }
