@@ -48,7 +48,7 @@ export default function Contact() {
   return (
     <div id="contact" className="contact" ref={container}>
       <div className="contact__container h-screen container flex flex-col items-center">
-        <div className="contact__links flex items-center justify-center gap-3 h-full">
+        <div className="contact__links flex flex-col sm:flex-row items-center justify-center gap-5 h-full">
           {contactLinks && contactLinks.map(contact => (
             <div className="contact__link" key={contact.name}>
               <a href={contact.url} target="_blank" rel="noopener">
@@ -57,8 +57,8 @@ export default function Contact() {
             </div>
           ))}
         </div>
-        <div className="contact__copyright">
-          <p>© 2025 - Design by Xcaret Castillo Sanchez ~ Dev by Yannick Liebnau. All rights reserved.</p>
+        <div className="contact__copyright text-center text-xs pb-2">
+          <p className="">© 2025 - Design by Xcaret Castillo Sanchez ~ Dev by Yannick Liebnau. All rights reserved.</p>
         </div>
       </div>
     </div>
