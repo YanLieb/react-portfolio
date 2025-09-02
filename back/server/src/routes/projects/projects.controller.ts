@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 
-import { saveProject } from '../models/project.model'
+import { saveProject } from '../../models/projects.model'
 
 export async function addProject(req: Request, res: Response)  {
   const project = req.body;

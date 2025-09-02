@@ -1,5 +1,4 @@
-import projectModel from "./project.mongo";
-
+import projectModel from "./projects.mongo";
 
 export async function saveProject(data: JSON) {
   try {
