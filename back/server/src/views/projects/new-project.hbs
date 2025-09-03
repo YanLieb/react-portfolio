@@ -1,37 +1,34 @@
-
-  <header class="header">
-    <h1>{{title}}</h1>
-  </header>
-  
-  <form id="project-form" class="project_form">
-    <div class="project-form__title">
-      <label for="project_title">Titre</label>
-      <input 
-        type="text"
-        name="title"
-        id="project_title"
-        placeholder="Titre du projet"
-      />
-    </div>
-    <div class="project-form__description">
-      <label for="project_description">Description</label>
-      <textarea
-        name="description"
-        id="project_description"
-        placeholder="Description du projet"
-        rows="20"
-        cols="40"
-      ></textarea>
-    </div>
-    <div class="project-form__link">
-      <label for="project_link">Lien</label>
-      <input
-        type="url"
-        name="link"
-        id="project_link"
-      />
-    </div>
-    <div class="project-form__submit">
-      <input type="submit" value="Save" />
-    </div>
-  </form>
+<form id="project-form" class="project_form">
+  <div class="project-form__title">
+    <label for="project_title">Title</label>
+    <input
+      type="text"
+      name="title"
+      id="project_title"
+      placeholder="Project Title"
+    />
+  </div>
+  <div class="project-form__description">
+    <label for="project_description">Description</label>
+    <textarea
+      name="description"
+      id="project_description"
+      placeholder="Project Description"
+      rows="20"
+      cols="40"
+    ></textarea>
+  </div>
+  <div class="project-form__link">
+    <label for="project_link">Link</label>
+    <input
+      type="url"
+      name="link"
+      id="project_link"
+      placeholder="https://project-link.com"
+      value="https://"
+    />
+  </div>
+  <div class="project-form__submit">
+    <input type="submit" value="Save" />
+  </div>
+</form>

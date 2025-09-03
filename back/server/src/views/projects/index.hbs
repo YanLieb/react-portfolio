@@ -1,0 +1,14 @@
+<ol>
+  {{#each projects as |project|}}
+    <li id="{{project._id}}">
+      <ul>
+        <li>
+          {{title}}
+        </li>
+        <li>
+          <a href="/project/{{project._id}}">Open</a>
+        </li>
+      </ul>
+    </li>
+  {{/each}}
+</ol>

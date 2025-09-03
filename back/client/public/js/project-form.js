@@ -8,7 +8,7 @@ function fetchForm() {
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries())
 
-      const response = await fetch('/project', {
+      const response = await fetch('/projects', {
         method: 'POST',
         headers: {'Content-Type' : 'application/json'},
         body: JSON.stringify(payload)

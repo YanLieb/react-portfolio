@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
 
-import { saveProject } from '../../models/projects.model'
+import { saveProject, findProjects } from '../../models/projects.model'
 
-export async function addProject(req: Request, res: Response)  {
+export async function addProject(req: Request, res: Response) {
   const project = req.body;
 
   if (!project.title || !project.description || !project.link) {
@@ -12,5 +12,20 @@ export async function addProject(req: Request, res: Response)  {
   }
 
   const savedProject = await saveProject(project);
-  return res.status(201).json({savedProject, success: 'Project saved successfully'});
+  return res.status(201).json({ savedProject, success: 'Project saved successfully' });
+}
+
+export async function getProjects(req: Request, res: Response) {
+  const projects = await findProjects();
+  
+  if (!projects.length) {
+    return res.status(400).json({
+      error: 'No Projects found'
+    })
+  }
+
+  res.render('projects', {
+    title: 'All projects',
+    projects
+  })
 }
