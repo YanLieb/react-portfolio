@@ -7,8 +7,8 @@ mongoose.connection.on('error', err => {
   console.error(err)
 })
 
-export async function mongoConnect() {
-  await mongoose.connect('mongodb://localhost:27017/portfolio')
+export async function mongoConnect(url: string) {
+  await mongoose.connect(url)
 }
 
 export async function mongoDisconnect() {
