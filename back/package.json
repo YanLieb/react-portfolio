@@ -6,21 +6,24 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/server.ts",
-    "dev": "concurrently \"npm run build:client:watch\" \"nodemon src/server.ts\"",
+    "dev": "concurrently \"npm run watch:clientjs\" \"npm run watch:clientcss\" \"nodemon src/server.ts\"",
     "dev:server": "nodemon src/server.ts",
     "build:client": "vite build",
-    "build:client:watch": "vite build --watch",
+    "watch:clientjs": "vite build --watch",
+    "watch:clientcss": "npx @tailwindcss/cli -i ./public/src/css/style.css -o ./public/dist/css/style-dist.css --watch",
     "kill-cache": "powershell \"Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tailwindcss/cli": "^4.1.13",
     "express": "^5.1.0",
     "hbs": "^4.2.0",
     "mongodb": "^6.19.0",
     "mongoose": "^8.18.0",
-    "slug": "^11.0.0"
+    "slug": "^11.0.0",
+    "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",

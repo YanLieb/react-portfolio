@@ -27,9 +27,10 @@ function fetchForm() {
 }
 
 function slugifyTitle() {
-  const title = document.querySelector('#project_title') as HTMLInputElement;
-  title?.addEventListener('blur', (e: Event) => {
-    console.log(slug(title.value))
+  const titleInput = document.querySelector('#project_title') as HTMLInputElement;
+  const slugInput = document.querySelector('#project_slug') as HTMLInputElement;
+  titleInput?.addEventListener('blur', (e: Event) => {
+    slugInput.value = slug(titleInput.value);
   })
 }
 

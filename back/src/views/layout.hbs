@@ -2,19 +2,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/dist/css/style-dist.css">
     {{#if styles}}
       <link rel="stylesheet" href="{{styles}}" class="css" />
-    {{/if}}!
+    {{/if}}
     <title>{{title}}</title>
   </head>
-  <body>
-    {{> header}}
+  <body class="flex">
+   {{> menu}}
 
-    <main>
+    <main class="container flex-10/12 p-8">
+    {{> header}}
       {{{body}}}
+    {{> footer}}
     </main>
 
-    {{> footer}}
 
     {{#if scripts}}
     <script src="{{scripts}}" defer></script>
