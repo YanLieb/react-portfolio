@@ -10,7 +10,7 @@ projectsRouter.get('/', getProjects)
 projectsRouter.get('/new', (req: Request, res: Response) => {
   res.render('projects/new-project', {
     title: 'Create a new project',
-    scripts: '/js/project-form.js'
+    scripts: '/dist/js/project-form.js'
   })
 })
 

@@ -1,5 +1,8 @@
+import slug from 'slug';
+
 function fetchForm() {
-  const form = document.getElementById('project-form');
+
+  const form = document.getElementById('project-form') as HTMLFormElement;
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -23,6 +26,15 @@ function fetchForm() {
   })
 }
 
+function slugifyTitle() {
+  const title = document.querySelector('#project_title') as HTMLInputElement;
+  title?.addEventListener('blur', (e: Event) => {
+    console.log(slug(title.value))
+  })
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   fetchForm()
+  slugifyTitle();
 })
