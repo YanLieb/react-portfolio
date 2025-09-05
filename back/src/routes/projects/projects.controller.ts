@@ -5,7 +5,7 @@ import { saveProject, findProjects } from '../../models/projects.model'
 export async function addProject(req: Request, res: Response) {
   const project = req.body;
 
-  if (!project.title || !project.description || !project.link) {
+  if (!project.title || !project.description || !project.link || !project.slug) {
     return res.status(400).json({
       error: 'Missing one or more required project information'
     })

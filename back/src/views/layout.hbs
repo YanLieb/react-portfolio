@@ -2,7 +2,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/dist/css/style-dist.css">
+    <link rel="stylesheet" href="/dist/css/style.css">
     {{#if styles}}
       <link rel="stylesheet" href="{{styles}}" class="css" />
     {{/if}}
@@ -11,9 +11,11 @@
   <body class="flex">
    {{> menu}}
 
-    <main class="container flex-10/12 p-8">
+    <main class="container flex-10/12 p-8 h-full flex flex-col">
     {{> header}}
-      {{{body}}}
+      <div class="page-content grow-1">
+        {{{body}}}
+      </div>
     {{> footer}}
     </main>
 

@@ -1,7 +1,11 @@
 import hbs from 'hbs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import express from "express";
 import api from './routes/api';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 
 const app = express();
 

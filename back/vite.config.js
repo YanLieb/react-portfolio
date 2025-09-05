@@ -1,15 +1,22 @@
 import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   build: {
     outDir: 'public/dist',
     rollupOptions: {
-      input: 'public/src/js/project-form.ts',
+      input: {
+        'project-form': 'public/src/js/project-form.ts',
+        'style': 'public/src/css/style.css'
+      },
       output: {
         entryFileNames: 'js/[name].js',
-        format: 'iife'
+        assetFileNames: 'css/[name].css',
       }
     }
   },
+  plugins: [
+    tailwindcss(),
+  ],
   publicDir: false
 })

@@ -2,22 +2,22 @@
   "name": "back",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/server.ts",
-    "dev": "concurrently \"npm run watch:clientjs\" \"npm run watch:clientcss\" \"nodemon src/server.ts\"",
-    "dev:server": "nodemon src/server.ts",
+    "start": "tsx src/server.ts",
+    "dev": "concurrently \"npm run watch:client\" \"npm run dev:server\"",
+    "dev:server": "tsx watch src/server.ts",
     "build:client": "vite build",
-    "watch:clientjs": "vite build --watch",
-    "watch:clientcss": "npx @tailwindcss/cli -i ./public/src/css/style.css -o ./public/dist/css/style-dist.css --watch",
+    "watch:client": "vite build --watch",
     "kill-cache": "powershell \"Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.13",
+    "@tailwindcss/vite": "^4.1.13",
     "express": "^5.1.0",
     "hbs": "^4.2.0",
     "mongodb": "^6.19.0",
@@ -33,8 +33,7 @@
     "concurrently": "^9.2.1",
     "dotenv": "^17.2.1",
     "esbuild": "0.25.9",
-    "nodemon": "^3.1.10",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.20.5",
     "typescript": "^5.9.2",
     "vite": "^7.1.4"
   }
