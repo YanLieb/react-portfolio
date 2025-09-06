@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 
-import { saveProject, findProjects, findProject } from '../../models/projects.model'
+import { saveProject, findProjects, findById, findBySlug } from '../../models/projects.model'
 
 export default class Project {
   async getNew(req: Request, res: Response) {
@@ -14,7 +14,7 @@ export default class Project {
 
   async get(req: Request, res: Response) {
     const { slug } = req.params;
-    const project = await findProject(slug);
+    const project = await findBySlug(slug);
 
     if (!project) {
       return res.status(404).json({
@@ -25,7 +25,7 @@ export default class Project {
       project,
       scripts: '/dist/js/project-form.js',
       bodyId: `project-${project.id}`,
-      bodyClasses: `update-project project-${project.id} project-${project.slug}`
+      bodyClasses: `update-project project-${project.id} project-${project.slug}`,
     })
   }
 
@@ -44,14 +44,27 @@ export default class Project {
     })
   }
 
-  async add(req: Request, res: Response) {
-    const project = req.body;
-    console.log(req.body)
 
-    if (!project.title || !project.description || !project.link || !project.slug) {
+  add = async (req: Request, res: Response) => {
+    let project = req.body;
+    const slugTaken = await findBySlug(project.slug);
+    
+    if (slugTaken) {
       return res.status(400).json({
-        error: 'Missing one or more required project information'
+        error: {
+          slug: 'This slug is already taken'
+        }
       })
+    }
+    
+    for (const [key, value] of Object.entries(project) as [string, any][]) {
+      if (!value) {
+        return res.status(400).json({
+          error: {
+            key: `The field ${key} is empty`
+          }
+        })
+      }
     }
 
     const savedProject = await saveProject(project);

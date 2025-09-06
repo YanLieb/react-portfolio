@@ -1,9 +1,8 @@
+import { ObjectId } from "mongoose";
 import projectModel from "./projects.mongo";
 
 export async function saveProject(data: any) {
   try {
-    data.slug = await checkSlug(data.slug);
-
     const project = new projectModel(data)
 
     return await project.save();
@@ -13,19 +12,11 @@ export async function saveProject(data: any) {
   }
 }
 
-async function checkSlug(slug: string) {
-  let uniqueSlug = slug;
-  let counter = 1;
-
-  while (await findProject(uniqueSlug)) {
-    uniqueSlug = `${slug}-${counter}`;
-    counter++;
-  }
-
-  return uniqueSlug;
+export async function findById(id?: ObjectId) {
+  return await projectModel.findOne({_id: id})
 }
 
-export async function findProject(slug: string) {
+export async function findBySlug(slug: string) {
   return await projectModel.findOne({slug})
 }
 

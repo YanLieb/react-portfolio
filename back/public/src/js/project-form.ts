@@ -1,9 +1,7 @@
 import slug from 'slug';
 
 function fetchForm() {
-
-  const form = document.getElementById('project-form') as HTMLFormElement;
-  console.log(form)
+  const form = document.getElementById('project_form') as HTMLFormElement;
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -18,12 +16,28 @@ function fetchForm() {
         body: JSON.stringify(payload)
       })
 
-      if (!response.ok) throw new Error('Error when sending form')
+      const result = await response.json()
+
+      if (!response.ok) {
+        for (const [key, value] of Object.entries(result.error) as [string, string][]) {
+          const errorNotif = document.querySelector(`.error__${key}`) as HTMLElement;
+          if (errorNotif) errorNotif.innerText = value;
+          removeErrorMessageOnInput(errorNotif);
+          throw new Error(value)
+        }
+      }
       
       alert("Project saved!")
     } catch (err) {
       console.warn(err)
     }
+  })
+}
+
+function removeErrorMessageOnInput(errorNotif: HTMLElement) {
+  const input = errorNotif.nextElementSibling as HTMLInputElement;
+  input.addEventListener('input', () => {
+    errorNotif.innerText = '';
   })
 }
 
