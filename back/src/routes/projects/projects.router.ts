@@ -1,23 +1,15 @@
 import express from 'express';
 import { Request, Response } from 'express';
 
-import { addProject, getProjects } from './projects.controller';
+import Project from './projects.controller';
 
+const project = new Project;
 const projectsRouter = express.Router();
 
-projectsRouter.get('/', getProjects)
+projectsRouter.get('/new', project.getNew)
+projectsRouter.get("/:slug", project.get)
+projectsRouter.get('/', project.getAll)
 
-projectsRouter.get('/new', (req: Request, res: Response) => {
-  res.render('projects/new-project', {
-    title: 'Create a new project',
-    scripts: '/dist/js/project-form.js'
-  })
-})
-
-projectsRouter.get("/:id", (req: Request, res: Response) => {
-  res.render('')
-})
-
-projectsRouter.post('/', addProject)
+projectsRouter.post('/', project.add)
 
 export default projectsRouter;

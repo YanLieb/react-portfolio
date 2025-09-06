@@ -1,14 +1,18 @@
-<ol>
+<ol class="project-list">
+  <li class="project-list__header bg-slate-200 text-slate-600">
+    <div class="project-list__header__container flex gap-2 p-3">
+      <div class="project-list__header__title flex-2">Title</div>
+      <div class="project-list__header__link flex-1">Link</div>
+    </div>
+  </li>
   {{#each projects as |project|}}
-    <li id="{{project._id}}">
-      <ul>
-        <li>
-          {{project.title}}
-        </li>
-        <li>
-          <a href="/project/{{project.slug}}">Open</a>
-        </li>
-      </ul>
+    <li id="{{project._id}}" class="project-list__entry odd:bg-slate-100">
+      <div class="project-list__entry__container flex items-center gap-2 px-3 py-2">
+        <div class="project-lits__entry__title flex-2">{{project.title}}</div>
+        <div class="project-list__entry__link flex-1">
+          <a class="btn flex-1" href="/projects/{{project.slug}}">Open</a>
+        </div>
+      </div>
     </li>
   {{/each}}
 </ol>

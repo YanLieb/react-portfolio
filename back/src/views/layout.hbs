@@ -8,7 +8,7 @@
     {{/if}}
     <title>{{title}}</title>
   </head>
-  <body class="flex">
+  <body{{#if bodyId}} id="{{bodyId}}"{{/if}} class="flex{{#if bodyClasses}} {{bodyClasses}}{{/if}}">
    {{> menu}}
 
     <main class="container flex-10/12 p-8 h-full flex flex-col">

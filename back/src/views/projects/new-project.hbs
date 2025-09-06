@@ -6,6 +6,7 @@
       name="title"
       id="project_title"
       placeholder="Project Title"
+      {{#if project.title}}value="{{project.title}}"{{/if}}
     />
   </div>
   <div class="project-form__slug">
@@ -14,7 +15,7 @@
     type="text"
     name="slug"
     id="project_slug"
-    value="slug">
+    {{#if project.slug}}value="{{project.slug}}"{{/if}}>
   </div>
   <div class="project-form__description">
     <label for="project_description">Description</label>
@@ -24,7 +25,8 @@
       placeholder="Project Description"
       rows="20"
       cols="40"
-    ></textarea>
+      class="min-h-40"
+      >{{#if project.description}}{{project.description}}{{/if}}</textarea>
   </div>
   <div class="project-form__link">
     <label for="project_link">Link</label>
@@ -33,7 +35,7 @@
       name="link"
       id="project_link"
       placeholder="https://project-link.com"
-      value="https://"
+      {{#if project.link}}value="{{project.link}}"{{else}}value="https://"{{/if}}
     />
   </div>
   <div class="project-form__submit">

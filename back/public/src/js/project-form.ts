@@ -3,6 +3,7 @@ import slug from 'slug';
 function fetchForm() {
 
   const form = document.getElementById('project-form') as HTMLFormElement;
+  console.log(form)
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
