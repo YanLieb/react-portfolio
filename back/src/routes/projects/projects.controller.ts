@@ -48,23 +48,20 @@ export default class Project {
   add = async (req: Request, res: Response) => {
     let project = req.body;
     const slugTaken = await findBySlug(project.slug);
-    
+    const errors: Record<string, string> = {};
+
     if (slugTaken) {
-      return res.status(400).json({
-        error: {
-          slug: 'This slug is already taken'
-        }
-      })
+      errors.slug = 'This slug is already taken'
     }
-    
+
     for (const [key, value] of Object.entries(project) as [string, any][]) {
       if (!value) {
-        return res.status(400).json({
-          error: {
-            key: `The field ${key} is empty`
-          }
-        })
+        errors[key] = `The field ${key} cannot be empty`
       }
+    }
+
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({ error: errors });
     }
 
     const savedProject = await saveProject(project);

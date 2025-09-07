@@ -19,12 +19,13 @@ function fetchForm() {
       const result = await response.json()
 
       if (!response.ok) {
-        for (const [key, value] of Object.entries(result.error) as [string, string][]) {
-          const errorNotif = document.querySelector(`.error__${key}`) as HTMLElement;
-          if (errorNotif) errorNotif.innerText = value;
-          removeErrorMessageOnInput(errorNotif);
-          throw new Error(value)
+        const errors = result.error;
+
+        for (const [key, value] of Object.entries(errors) as [string, string][]) {
+          insertErrorMessage(key, value)
         }
+        
+        throw new Error('Please check errors above and try again')
       }
       
       alert("Project saved!")
@@ -34,23 +35,51 @@ function fetchForm() {
   })
 }
 
-function removeErrorMessageOnInput(errorNotif: HTMLElement) {
-  const input = errorNotif.nextElementSibling as HTMLInputElement;
-  input.addEventListener('input', () => {
-    errorNotif.innerText = '';
+function insertErrorMessage(key: string, value: string) {
+  const errorField = document.querySelector(`.project-form__${key}`) as HTMLElement;
+  const errorMsg = document.createElement('span');
+
+  errorMsg.classList.add('error', `error__${key}`);
+  errorMsg.innerText = value;
+  if (!errorField.querySelector('.error')) {
+    errorField?.append(errorMsg);
+  }
+
+  console.warn(`${key}: ${value}`);
+  
+  removeErrorMessageOnInput(errorMsg);
+}
+
+function removeErrorMessageOnInput(errorMsg: HTMLElement) {
+  const input = errorMsg.previousElementSibling as HTMLInputElement;
+  input.addEventListener('focus', () => {
+    errorMsg.remove();
   })
 }
 
 function slugifyTitle() {
   const titleInput = document.querySelector('#project_title') as HTMLInputElement;
   const slugInput = document.querySelector('#project_slug') as HTMLInputElement;
-  titleInput?.addEventListener('blur', (e: Event) => {
+  titleInput?.addEventListener('input', (e: Event) => {
     slugInput.value = slug(titleInput.value);
   })
 }
 
+function clientFormControls() {
+  const form = document.getElementById('project_form') as HTMLFormElement;
+  const inputs = form?.querySelectorAll('input, textarea') as NodeListOf<HTMLInputElement>;
+
+  inputs.forEach((input) => {
+    input?.addEventListener('blur', (e: Event) => {
+      const fieldName = input.getAttribute('name');
+      if (!fieldName) return;
+      if (input.value === "") insertErrorMessage(fieldName, 'This field cannot be empty')
+    })
+  })
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchForm()
   slugifyTitle();
+  clientFormControls();
 })
