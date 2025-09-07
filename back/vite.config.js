@@ -6,12 +6,12 @@ export default defineConfig({
     outDir: 'public/dist',
     rollupOptions: {
       input: {
-        'project-form': 'public/src/js/project-form.ts',
+        'script': 'public/src/ts/script.ts',
         'style': 'public/src/css/style.css'
       },
       output: {
-        entryFileNames: 'js/[name].js',
-        assetFileNames: 'css/[name].css',
+        entryFileNames: '[name].js',
+        assetFileNames: '[name].css',
       }
     }
   },

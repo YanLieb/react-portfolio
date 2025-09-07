@@ -1,12 +1,11 @@
 import type { Request, Response } from "express";
 
-import { saveProject, findProjects, findById, findBySlug } from '../../models/projects.model'
+import { saveProject, findProjects, findById, findBySlug } from '../../models/project/projects.model'
 
 export default class Project {
   async getNew(req: Request, res: Response) {
-    res.render('projects/new-project', {
+    res.render('projects/project', {
       title: 'Create a new project',
-      scripts: '/dist/js/project-form.js',
       bodyId: 'new-project',
       bodyClasses: 'new-project project'
     })
@@ -21,7 +20,7 @@ export default class Project {
         error: 'Project not found'
       })
     }
-    return res.status(200).render('projects/new-project', {
+    return res.status(200).render('projects/project', {
       project,
       scripts: '/dist/js/project-form.js',
       bodyId: `project-${project.id}`,
@@ -33,8 +32,8 @@ export default class Project {
     const projects = await findProjects();
 
     if (!projects.length) {
-      return res.status(400).json({
-        error: 'No Projects found'
+      return res.status(400).render('projects', {
+        error: 'No Projects yet'
       })
     }
 

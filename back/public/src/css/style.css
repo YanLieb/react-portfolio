@@ -20,7 +20,19 @@
 
 @layer components {
   .main-nav {
-    @apply w-2/12 bg-slate-400 p-4 text-slate-50;
+    @apply w-2/12 bg-slate-400 py-4 text-slate-50;
+
+    & .main-nav__entry {
+      @apply mb-4;
+
+      & a {
+        @apply block w-full py-1 px-4 transition hover:bg-slate-500;
+      }
+    }
+
+    & .main-nav__sub a {
+      @apply ps-6;
+    }
   }
   
   .btn {

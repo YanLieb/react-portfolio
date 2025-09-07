@@ -1,0 +1,11 @@
+import ProjectForm from './project-form';
+import CategoryForm from './category-form';
+
+
+const projectForm = new ProjectForm("project_form");
+const categoryForm = new CategoryForm("category_form");
+
+document.addEventListener('DOMContentLoaded', () => {
+  projectForm.init();
+  categoryForm.init();
+})
