@@ -79,7 +79,7 @@ export default function ProjectsList() {
       <div className="projects__next-btn absolute right-1/3 top-2/3 md:top-1/2 md:end-2 md:-translate-y-1/2 z-10 cursor-pointer">
         <span className="block w-6 h-6 border border-gray-900 border-r-0 border-b-0 rotate-135"></span>
       </div>
-      <div className="projects__categories-menu flex gap-1 md:gap-2 absolute bottom-5 w-full flex-col md:flex-row md:justify-center md:items-center">
+      <div className="projects__categories-menu flex flex-wrap gap-2 absolute bottom-0 w-full flex-col lg:flex-row lg:justify-center lg:items-center">
         {categoryData.map((data) => data.categoryMenuItem)}
       </div>
       {categoryData.map((data) => data.isActive && data.projectsMenu)}
