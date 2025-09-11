@@ -43,7 +43,7 @@ export default function ProjectsList() {
                 projectData={project}
                 currentSlideIndex={currentSlideIndex}
               />
-            ))};
+            ))}
           </div>
         ),
         projectsMenu: (

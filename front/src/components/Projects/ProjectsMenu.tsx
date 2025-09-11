@@ -22,6 +22,6 @@ export default function ProjectsMenu({ category, projects, currentSlideIndex }: 
         </div>
       ))
       }
-    </div >
+    </div>
   )
 }
