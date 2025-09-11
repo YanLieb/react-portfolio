@@ -1,4 +1,4 @@
-<div id="category_form" class="category-form-new">
+<form id="category_form" class="category-form-new">
   <div class="category-form__name mb-4">
     <label for="category_name">Name</label>
     <input 
@@ -20,4 +20,7 @@
       {{#if category.slug}}value="{{category.slug}}"{{/if}}
     />
   </div>
-</div>
+  <div class="cateogory-form__submit">
+    <input type="submit" value="Save" class="btn">
+  </div>
+</form>
