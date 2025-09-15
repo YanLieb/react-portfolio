@@ -1,4 +1,4 @@
-import { useRef, useMemo, useState } from "react";
+import { useRef, useMemo, useState, useCallback } from "react";
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -17,11 +17,12 @@ export default function ProjectsList() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const CATEGORIES = Object.keys(projectsData.projects) as Array<keyof typeof projectsData.projects>;
 
-  const setActiveCategory = (categoryId: number) => (e: React.MouseEvent) => {
+  const setActiveCategory = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
+    const categoryId = parseInt(e.currentTarget.getAttribute('data-category-id') ?? '1')
     setActiveCategoryId(categoryId);
     setCurrentSlideIndex(0)
-  }
+  }, []);
 
   const categoryData = useMemo(() =>
     CATEGORIES.map((category, index) => {
@@ -54,12 +55,12 @@ export default function ProjectsList() {
             {activeCategoryId === id ? (
               <span className="active-category">{category}</span>
             ) : (
-              <a href={`#category-${id}`} onClick={setActiveCategory(id)}>{category}</a>
+              <a href={`#category-${id}`} data-category-id={id} onClick={setActiveCategory}>{category}</a>
             )}
           </div>
         )
       };
-    }), [activeCategoryId, currentSlideIndex, CATEGORIES]
+    }), [activeCategoryId, currentSlideIndex, CATEGORIES, setActiveCategory]
   );
 
   useGSAP(() => {
