@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 
-import { saveProject, findProjects, findBySlug as findProjectBySlug } from '../../models/project/project.model'
-import { findCategories, findById as findCategoryById } from '../../models/category/category.model';
+import { saveProject, findProjects, findProjectBySlug, findProjectById } from '../../models/project/project.model'
+import { findCategories } from '../../models/category/category.model';
 
 export default class Project {
   async getNew(req: Request, res: Response) {
@@ -18,7 +18,7 @@ export default class Project {
     const { slug } = req.params;
     const project = await findProjectBySlug(slug);
     const categories = await findCategories();
-    
+
     if (!project) {
       return res.status(404).json({
         error: 'Project not found'
@@ -55,29 +55,37 @@ export default class Project {
     })
   }
 
-
   add = async (req: Request, res: Response) => {
     let project = req.body;
+    const alreadyExists = await findProjectById(project.id);
     const slugTaken = await findProjectBySlug(project.slug);
-    console.log(project.categories)
     const errors: Record<string, string> = {};
 
-    if (slugTaken) {
-      errors.slug = 'This slug is already taken'
-    }
+    if (alreadyExists) {
+      await this.update(project);
+    } else {
 
-    for (const [key, value] of Object.entries(project) as [string, any][]) {
-      if (!value) {
-        errors[key] = `The field ${key} cannot be empty`
+      if (slugTaken) {
+        errors.slug = 'This slug is already taken'
       }
-    }
 
-    if (Object.keys(errors).length > 0) {
-      return res.status(400).json({ error: errors });
-    }
+      for (const [key, value] of Object.entries(project) as [string, any][]) {
+        if (!value) {
+          errors[key] = `The field ${key} cannot be empty`
+        }
+      }
 
-    const savedProject = await saveProject(project);
-    console.log(savedProject);
-    return res.status(201).json({ savedProject, success: 'Project saved successfully' });
+      if (Object.keys(errors).length > 0) {
+        return res.status(400).json({ error: errors });
+      }
+
+      const savedProject = await saveProject(project);
+
+      return res.status(201).json({ savedProject, success: 'Project saved successfully' });
+    }
+  }
+
+  update = async (project: Project) => {
+    console.log(project)
   }
 }

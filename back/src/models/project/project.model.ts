@@ -12,11 +12,11 @@ export async function saveProject(data: any) {
   }
 }
 
-export async function findById(id?: ObjectId) {
+export async function findProjectById(id?: ObjectId) {
   return await projectModel.findOne({_id: id}).populate('categories')
 }
 
-export async function findBySlug(slug: string) {
+export async function findProjectBySlug(slug: string) {
   return await projectModel.findOne({ slug }).populate('categories')
 }
 
