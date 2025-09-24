@@ -1,9 +1,10 @@
 import express from 'express';
 import Category from './categories.controller'
 
-const category = new Category();
+const categoryController = new Category();
 const categoriesRouter = express.Router();
 
-categoriesRouter.get('/new', category.getNew)
+categoriesRouter.get('/new', categoryController.getNew)
+categoriesRouter.post('/', categoryController.add)
 
 export default categoriesRouter;

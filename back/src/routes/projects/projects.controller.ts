@@ -1,30 +1,42 @@
 import type { Request, Response } from "express";
 
-import { saveProject, findProjects, findById, findBySlug } from '../../models/project/projects.model'
+import { saveProject, findProjects, findBySlug as findProjectBySlug } from '../../models/project/project.model'
+import { findCategories, findById as findCategoryById } from '../../models/category/category.model';
 
 export default class Project {
   async getNew(req: Request, res: Response) {
+    const categories = await findCategories();
     res.render('projects/project', {
       title: 'Create a new project',
       bodyId: 'new-project',
-      bodyClasses: 'new-project project'
+      bodyClasses: 'new-project project',
+      categories
     })
   }
 
   async get(req: Request, res: Response) {
     const { slug } = req.params;
-    const project = await findBySlug(slug);
-
+    const project = await findProjectBySlug(slug);
+    const categories = await findCategories();
+    
     if (!project) {
       return res.status(404).json({
         error: 'Project not found'
       })
     }
+
+    const selectedCatIds = new Set(project.categories.map(cat => cat.id.toString()));
+    const categoriesWithSelectedFlag = categories.map(cat => ({
+      ...cat.toObject(),
+      selected: selectedCatIds.has(cat._id.toString())
+    }));
+
     return res.status(200).render('projects/project', {
       project,
       scripts: '/dist/js/project-form.js',
       bodyId: `project-${project.id}`,
       bodyClasses: `update-project project-${project.id} project-${project.slug}`,
+      categories: categoriesWithSelectedFlag
     })
   }
 
@@ -46,7 +58,8 @@ export default class Project {
 
   add = async (req: Request, res: Response) => {
     let project = req.body;
-    const slugTaken = await findBySlug(project.slug);
+    const slugTaken = await findProjectBySlug(project.slug);
+    console.log(project.categories)
     const errors: Record<string, string> = {};
 
     if (slugTaken) {
@@ -64,6 +77,7 @@ export default class Project {
     }
 
     const savedProject = await saveProject(project);
+    console.log(savedProject);
     return res.status(201).json({ savedProject, success: 'Project saved successfully' });
   }
 }

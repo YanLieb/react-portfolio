@@ -1,5 +1,5 @@
 import { ObjectId } from "mongoose";
-import projectModel from "./projects.mongo";
+import projectModel from "./project.mongo";
 
 export async function saveProject(data: any) {
   try {
@@ -13,11 +13,11 @@ export async function saveProject(data: any) {
 }
 
 export async function findById(id?: ObjectId) {
-  return await projectModel.findOne({_id: id})
+  return await projectModel.findOne({_id: id}).populate('categories')
 }
 
 export async function findBySlug(slug: string) {
-  return await projectModel.findOne({slug})
+  return await projectModel.findOne({ slug }).populate('categories')
 }
 
 export async function findProjects() {

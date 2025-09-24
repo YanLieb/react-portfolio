@@ -2,13 +2,13 @@ import express from 'express';
 
 import Project from './projects.controller';
 
-const project = new Project;
+const projectController = new Project;
 const projectsRouter = express.Router();
 
-projectsRouter.get('/new', project.getNew)
-projectsRouter.get("/:slug", project.get)
-projectsRouter.get('/', project.getAll)
+projectsRouter.get('/new', projectController.getNew)
+projectsRouter.get("/:slug", projectController.get)
+projectsRouter.get('/', projectController.getAll)
 
-projectsRouter.post('/', project.add)
+projectsRouter.post('/', projectController.add)
 
 export default projectsRouter;

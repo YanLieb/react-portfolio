@@ -8,10 +8,10 @@
     {{/if}}
     <title>{{title}}</title>
   </head>
-  <body{{#if bodyId}} id="{{bodyId}}"{{/if}} class="flex{{#if bodyClasses}} {{bodyClasses}}{{/if}}">
+  <body{{#if bodyId}} id="{{bodyId}}"{{/if}} class="flex min-h-lvh{{#if bodyClasses}} {{bodyClasses}}{{/if}}">
    {{> menu}}
 
-    <main class="container flex-10/12 p-8 h-full flex flex-col">
+    <main class="container flex-10/12 p-8 h-full flex flex-col min-h-lvh">
     {{> header}}
       <div class="page-content grow-1">
         {{{body}}}

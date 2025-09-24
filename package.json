@@ -16,7 +16,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:front": "cd front && npm run dev"
+    "dev:front": "cd front && npm run dev",
+    "dev:back": "cd back && npm run dev"
   },
   "config": {
     "commitizen": {

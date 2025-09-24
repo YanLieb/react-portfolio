@@ -1,4 +1,5 @@
-import { slugifyTitle, clientFormControls } from './_utils';
+import TomSelect from 'tom-select';
+import { slugifyTitle, clientFormControls, insertErrorMessage } from './_utils';
 
 export default class ProjectForm {
   form: HTMLFormElement;
@@ -9,13 +10,23 @@ export default class ProjectForm {
 
   init() {
     try {
-      if (!this.form) throw new Error('Form not found, check the class in ProjectForm instantation params') 
-        this.fetchForm(this.form);
+      if (!this.form) throw new Error('Form not found, check the class in ProjectForm instantation params')
+      
+      this.categoriesSelect();
+      
+      this.fetchForm(this.form);
       clientFormControls(this.form);
       slugifyTitle("#project_title", "#project_slug");
     } catch (err) {
       console.warn(err)
     }
+  }
+
+  categoriesSelect() {
+    const select = document.querySelector<HTMLSelectElement>('#project_categories');
+    if (!select) return;
+
+    new TomSelect(select, {})
   }
 
   fetchForm(form: HTMLFormElement) {
@@ -24,7 +35,8 @@ export default class ProjectForm {
 
       try {
         const formData = new FormData(form);
-        const payload = Object.fromEntries(formData.entries())
+        const payload = Object.fromEntries(formData.entries()) as Record<string, FormDataEntryValue | FormDataEntryValue[]>;
+        payload.categories = formData.getAll('categories').filter(Boolean);
 
         const response = await fetch('/projects', {
           method: 'POST',
@@ -38,7 +50,7 @@ export default class ProjectForm {
           const errors = result.error;
 
           for (const [key, value] of Object.entries(errors) as [string, string][]) {
-            this.insertErrorMessage(key, value)
+            insertErrorMessage(key, value)
           }
 
           throw new Error('Please check errors above and try again')
@@ -48,28 +60,6 @@ export default class ProjectForm {
       } catch (err) {
         console.warn(err)
       }
-    })
-  }
-
-  insertErrorMessage(key: string, value: string) {
-    const errorField = document.querySelector(`.project-form__${key}`) as HTMLElement;
-    const errorMsg = document.createElement('span');
-
-    errorMsg.classList.add('error', `error__${key}`);
-    errorMsg.innerText = value;
-    if (!errorField.querySelector('.error')) {
-      errorField?.append(errorMsg);
-    }
-
-    console.warn(`${key}: ${value}`);
-
-    this.removeErrorMessageOnInput(errorMsg);
-  }
-
-  removeErrorMessageOnInput(errorMsg: HTMLElement) {
-    const input = errorMsg.previousElementSibling as HTMLInputElement;
-    input.addEventListener('focus', () => {
-      errorMsg.remove();
     })
   }
 }

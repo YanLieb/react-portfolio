@@ -6,6 +6,6 @@ const projectForm = new ProjectForm("project_form");
 const categoryForm = new CategoryForm("category_form");
 
 document.addEventListener('DOMContentLoaded', () => {
-  projectForm.init();
-  categoryForm.init();
+  projectForm.form && projectForm.init();
+  categoryForm.form && categoryForm.init();
 })
