@@ -1,11 +1,11 @@
 import express from 'express';
 
-import projectsRouter from './projects/projects.router'
-import categoriesRouter from './categories/categories.router';
+import projectRouter from './project/project.router'
+import categoryRouter from './category/category.router';
 
 const api = express.Router();
 
-api.use('/projects', projectsRouter)
-api.use('/categories', categoriesRouter);
+api.use('/project', projectRouter)
+api.use('/category', categoryRouter);
 
 export default api;

@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
 
-import { saveProject, findProjects, findProjectBySlug, findProjectById } from '../../models/project/project.model'
+import { saveProject, updateProject, findProjects, findProjectBySlug, findProjectById, ProjectInterface } from '../../models/project/project.model'
 import { findCategories } from '../../models/category/category.model';
 
-export default class Project {
+export default class ProjectController {
   async getNew(req: Request, res: Response) {
     const categories = await findCategories();
     res.render('projects/project', {
@@ -33,6 +33,7 @@ export default class Project {
 
     return res.status(200).render('projects/project', {
       project,
+      title: 'Update project',
       scripts: '/dist/js/project-form.js',
       bodyId: `project-${project.id}`,
       bodyClasses: `update-project project-${project.id} project-${project.slug}`,
@@ -57,35 +58,42 @@ export default class Project {
 
   add = async (req: Request, res: Response) => {
     let project = req.body;
-    const alreadyExists = await findProjectById(project.id);
     const slugTaken = await findProjectBySlug(project.slug);
     const errors: Record<string, string> = {};
 
-    if (alreadyExists) {
-      await this.update(project);
-    } else {
-
-      if (slugTaken) {
-        errors.slug = 'This slug is already taken'
-      }
-
-      for (const [key, value] of Object.entries(project) as [string, any][]) {
-        if (!value) {
-          errors[key] = `The field ${key} cannot be empty`
-        }
-      }
-
-      if (Object.keys(errors).length > 0) {
-        return res.status(400).json({ error: errors });
-      }
-
-      const savedProject = await saveProject(project);
-
-      return res.status(201).json({ savedProject, success: 'Project saved successfully' });
+    if (slugTaken) {
+      errors.slug = 'This slug is already taken'
     }
+
+    for (const [key, value] of Object.entries(project) as [string, any][]) {
+      if (!value) {
+        errors[key] = `The field ${key} cannot be empty`
+      }
+    }
+
+    if (Object.keys(errors).length) {
+      return res.status(400).json({ error: errors });
+    }
+
+    const savedProject = await saveProject(project);
+
+    return res.status(201).json({ savedProject, success: 'Project saved successfully' });
   }
 
-  update = async (project: Project) => {
-    console.log(project)
+  update = async (req: Request, res: Response) => {
+    console.log(req.body)
+    const id = req.query.id as string;
+    const update = req.body as Partial<ProjectInterface>;
+    const errors: Record<string, string> = {};
+
+    if (!id) errors.id = 'Missing project id';
+
+    const updatedProject = await updateProject(id, update);
+
+    if (!updatedProject) errors.notFound = 'Project not found';
+
+    if (Object.keys(errors).length) return res.status(400).json({ error: errors });
+
+    return res.status(200).json({ updatedProject, success: 'Project updated successfully' })
   }
 }

@@ -35,20 +35,21 @@ export default class ProjectForm {
 
       try {
         const formData = new FormData(form);
-        const payload = Object.fromEntries(formData.entries()) as Record<string, FormDataEntryValue | FormDataEntryValue[]>;
-        payload.categories = formData.getAll('categories').filter(Boolean);
-
-        const response = await fetch('/projects', {
-          method: 'POST',
+        const formObject = Object.fromEntries(formData.entries()) as Record<string, FormDataEntryValue | FormDataEntryValue[]>;
+        formObject.categories = formData.getAll('categories').filter(Boolean);
+        const url = formObject.id ? `/project/${formObject.id}` : '/project';
+        const method = formObject.id ? 'PATCH' : 'POST';
+        
+        const response = await fetch(url, {
+          method,
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(formObject)
         })
 
         const result = await response.json()
 
         if (!response.ok) {
           const errors = result.error;
-
           for (const [key, value] of Object.entries(errors) as [string, string][]) {
             insertErrorMessage(key, value)
           }

@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { saveCategory, findBySlug } from '../../models/category/category.model';
 
-export default class Category {
+export default class CategoryController {
   getNew(req: Request, res: Response) {
     res.render('categories/category', {
       title: 'Add new category',

@@ -1,7 +1,16 @@
 import { ObjectId } from "mongoose";
 import projectModel from "./project.mongo";
 
-export async function saveProject(data: any) {
+export interface ProjectInterface {
+  id: string,
+  title: string,
+  slug: string,
+  description: string,
+  link: string,
+  categories: string[]
+}
+
+export async function saveProject(data: ProjectInterface) {
   try {
     const project = new projectModel(data)
 
@@ -12,8 +21,17 @@ export async function saveProject(data: any) {
   }
 }
 
+export async function updateProject(id: string, update: Partial<ProjectInterface>) {
+  return projectModel
+    .findByIdAndUpdate(id, update, {
+      new: true,
+      runValidators: true
+    })
+    .populate('categories');
+}
+
 export async function findProjectById(id?: ObjectId) {
-  return await projectModel.findOne({_id: id}).populate('categories')
+  return await projectModel.findById(id).populate('categories')
 }
 
 export async function findProjectBySlug(slug: string) {

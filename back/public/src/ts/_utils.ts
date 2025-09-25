@@ -22,23 +22,31 @@ export function clientFormControls(form: HTMLFormElement) {
 }
 
 export function insertErrorMessage(key: string, value: string) {
-  const errorField = document.querySelector(`.form__${key}`) as HTMLElement;
-  const errorMsg = document.createElement('span');
+  const errorField = document.querySelector(`.form__${key}`) as HTMLElement | null;
+  const header = document.querySelector('.main-header');
+  const errorMsg = document.createElement('div');
 
   errorMsg.classList.add('error', `error__${key}`);
   errorMsg.innerText = value;
-  if (!errorField.querySelector('.error')) {
-    errorField?.append(errorMsg);
+  if (errorField && !errorField.querySelector('.error')) {
+    errorField.append(errorMsg);
+  } else {
+    header?.appendChild(errorMsg)
   }
 
   console.warn(`${key}: ${value}`);
 
-  removeErrorMessageOnInput(errorMsg);
+  removeErrorMessages(errorMsg);
 }
 
-function removeErrorMessageOnInput(errorMsg: HTMLElement) {
+function removeErrorMessages(errorMsg: HTMLElement) {
   const input = errorMsg.previousElementSibling as HTMLInputElement;
-  input.addEventListener('focus', () => {
-    errorMsg.remove();
-  })
+  if (input) {
+    input.addEventListener('focus', () => {
+      errorMsg.remove();
+    })
+  } else {
+    const form = document.querySelector('.form');
+    form?.addEventListener('submit', () => { errorMsg.remove() })
+  }
 }
