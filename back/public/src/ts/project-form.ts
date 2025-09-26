@@ -11,9 +11,9 @@ export default class ProjectForm {
   init() {
     try {
       if (!this.form) throw new Error('Form not found, check the class in ProjectForm instantation params')
-      
+
       this.categoriesSelect();
-      
+
       this.fetchForm(this.form);
       clientFormControls(this.form);
       slugifyTitle("#project_title", "#project_slug");
@@ -39,7 +39,7 @@ export default class ProjectForm {
         formObject.categories = formData.getAll('categories').filter(Boolean);
         const url = formObject.id ? `/project/${formObject.id}` : '/project';
         const method = formObject.id ? 'PATCH' : 'POST';
-        
+
         const response = await fetch(url, {
           method,
           headers: { 'Content-Type': 'application/json' },
@@ -57,7 +57,14 @@ export default class ProjectForm {
           throw new Error('Please check errors above and try again')
         }
 
-        alert(result.success)
+        if (formObject.id) {
+          const keepEditing = window.confirm(`${result.success}! Keep editing ?`);
+          keepEditing ? window.location.assign(`/project/${formObject.slug}`) : window.location.assign('/project');
+        } else {
+          const addNew = window.confirm(`${result.success}! Add a new project ?`);
+          addNew ? window.location.assign('/project/new') : window.location.assign('/project');
+        }
+
       } catch (err) {
         console.warn(err)
       }
