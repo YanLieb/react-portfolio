@@ -57,7 +57,7 @@ export default class ProjectForm {
           throw new Error('Please check errors above and try again')
         }
 
-        alert("Project saved!")
+        alert(result.success)
       } catch (err) {
         console.warn(err)
       }

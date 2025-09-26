@@ -11,5 +11,6 @@ projectRouter.get('/', projectController.getAll)
 
 projectRouter.post('/', projectController.add)
 projectRouter.patch('/:id', projectController.update)
+projectRouter.delete('/:id', projectController.delete);
 
 export default projectRouter;

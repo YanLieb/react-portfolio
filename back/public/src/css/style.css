@@ -40,6 +40,10 @@
     @apply inline-block w-fit px-4 py-2 bg-slate-600 text-white rounded cursor-pointer transition hover:bg-slate-400;
   }
 
+  .btn-danger {
+    @apply bg-red-700 hover:bg-red-500;
+  }
+
   .error {
     @apply text-red-700;
   }

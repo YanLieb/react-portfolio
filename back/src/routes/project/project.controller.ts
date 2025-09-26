@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 
-import { saveProject, updateProject, findProjects, findProjectBySlug, findProjectById, ProjectInterface } from '../../models/project/project.model'
+import { saveProject, updateProject, findProjects, findProjectBySlug, deleteProject, ProjectInterface } from '../../models/project/project.model'
 import { findCategories } from '../../models/category/category.model';
 
 export default class ProjectController {
@@ -56,7 +56,7 @@ export default class ProjectController {
     })
   }
 
-  add = async (req: Request, res: Response) => {
+  async add(req: Request, res: Response) {
     let project = req.body;
     const slugTaken = await findProjectBySlug(project.slug);
     const errors: Record<string, string> = {};
@@ -80,9 +80,8 @@ export default class ProjectController {
     return res.status(201).json({ savedProject, success: 'Project saved successfully' });
   }
 
-  update = async (req: Request, res: Response) => {
-    console.log(req.body)
-    const id = req.query.id as string;
+  async update(req: Request, res: Response) {
+    const id = req.params.id as string;
     const update = req.body as Partial<ProjectInterface>;
     const errors: Record<string, string> = {};
 
@@ -95,5 +94,20 @@ export default class ProjectController {
     if (Object.keys(errors).length) return res.status(400).json({ error: errors });
 
     return res.status(200).json({ updatedProject, success: 'Project updated successfully' })
+  }
+
+  async delete(req: Request, res: Response) {
+    const { id } = req.params;
+    const errors: Record<string, string> = {};
+
+    if (!id) errors.id = 'Missing project id to delete';
+
+    const deletedProject = await deleteProject(id);
+
+    if (!deletedProject) errors.notFound = 'Project not found';
+    
+    if (Object.keys(errors).length) return res.status(400).json({ error: errors });
+
+    return res.status(200).json({deletedProject, success: 'Project deleted'})
   }
 }

@@ -41,3 +41,7 @@ export async function findProjectBySlug(slug: string) {
 export async function findProjects() {
   return await projectModel.find()
 }
+
+export async function deleteProject(id: string) {
+  return await projectModel.findByIdAndDelete(id)
+}
