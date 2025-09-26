@@ -12,11 +12,11 @@ export async function saveCategory(data: any) {
   }
 }
 
-export async function findById(id?: ObjectId) {
-  return await categoryModel.findOne({_id: id})
+export async function findCategoryById(id?: ObjectId) {
+  return await categoryModel.findById(id)
 }
 
-export async function findBySlug(slug: string) {
+export async function findCategoryBySlug(slug: string) {
   return await categoryModel.findOne({slug})
 }
 

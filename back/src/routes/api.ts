@@ -5,7 +5,7 @@ import categoryRouter from './category/category.router';
 
 const api = express.Router();
 
-api.use('/project', projectRouter)
-api.use('/category', categoryRouter);
+api.use('/projects', projectRouter)
+api.use('/categories', categoryRouter);
 
 export default api;

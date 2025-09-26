@@ -5,7 +5,7 @@
     <li class="project-list__header bg-slate-200 text-slate-600">
       <div class="project-list__header__container flex gap-2 p-3">
         <div class="project-list__header__title flex-2">Title</div>
-        <div class="project-list__header__link flex-1">Link</div>
+        <div class="project-list__header__link flex-1">Actions</div>
       </div>
     </li>
     {{#each projects as |project|}}
@@ -13,10 +13,10 @@
         <div
           class="project-list__entry__container flex items-center gap-2 px-3 py-2"
         >
-          <div class="project-lits__entry__title flex-2">{{project.title}}</div>
+          <div class="project-list__entry__title flex-2">{{project.title}}</div>
           <div class="project-list__entry__link flex-1">
-            <a class="btn flex-1" href="/project/{{project.slug}}">Open</a>
-            <btn class="btn btn-danger delete-btn flex-1" data-id="{{project.id}}" href="/project/{{project.slug}}">Delete</btn>
+            <a class="btn flex-1" href="/projects/{{project.slug}}">Edit</a>
+            <btn class="btn btn-danger delete-btn flex-1" data-id="{{project.id}}" href="/projects/{{project.slug}}">Delete</btn>
           </div>
         </div>
       </li>
