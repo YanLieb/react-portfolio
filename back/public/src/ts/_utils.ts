@@ -50,30 +50,3 @@ function removeErrorMessages(errorMsg: HTMLElement) {
     form?.addEventListener('submit', () => { errorMsg.remove() })
   }
 }
-
-export async function deleteTarget(id: string) {
-  const shouldDelete = window.confirm('Delete this project?');
-  if (!shouldDelete) return;
-
-  const res = await fetch(`/project/${id}`, { method: 'DELETE' });
-  const payload = await res.json();
-
-  if (payload.error) {
-    window.alert(payload.error)
-  } else {
-    const confirmDelete = window.confirm(payload.success)
-    if (confirmDelete) window.location.reload();
-  }
-}
-
-export function deleteFromList() {
-  const deleteBtns: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.delete-btn');
-  deleteBtns.length && deleteBtns.forEach((btn: HTMLButtonElement) => {
-    const id = btn.dataset.id;
-    if (!id) return;
-
-    btn.addEventListener('click', async (e) => {
-      await deleteTarget(id);
-    })
-  })
-}

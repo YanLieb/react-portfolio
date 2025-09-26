@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { saveCategory, findCategoryBySlug, findCategories } from '../../models/category/category.model';
+import { CategoryInterface, saveCategory, updateCategory, findCategoryBySlug, findCategories, deleteCategory } from '../../models/category/category.model';
 
 export default class CategoryController {
   getNew(req: Request, res: Response) {
@@ -44,7 +44,7 @@ export default class CategoryController {
     })
   }
 
-  add = async (req: Request, res: Response) => {
+  async add(req: Request, res: Response) {
     let category = req.body;
     const slugTaken = await findCategoryBySlug(category.slug);
     const errors: Record<string, string> = {};
@@ -66,5 +66,36 @@ export default class CategoryController {
     const savedCategory = await saveCategory(category);
 
     return res.status(201).json({ savedCategory, success: 'Category saved successfully' });
+  }
+
+  async update(req: Request, res: Response) {
+    const id = req.params.id as string;
+    const update = req.body as Partial<CategoryInterface>;
+    const errors: Record<string, string> = {};
+
+    if (!id) errors.id = 'Missing category id';
+
+    const updatedCategory = await updateCategory(id, update);
+
+    if (!updatedCategory) errors.notFound = 'Category not found';
+
+    if (Object.keys(errors).length) return res.status(400).json({ error: errors });
+
+    return res.status(200).json({ updatedCategory, success: 'Category updated successfully' })
+  }
+
+  async delete(req: Request, res: Response) {
+    const { id } = req.params;
+    const errors: Record<string, string> = {};
+
+    if (!id) errors.id = 'Missing category id to delete';
+
+    const deletedCategory = await deleteCategory(id);
+
+    if (!deletedCategory) errors.notFound = 'Category not found';
+
+    if (Object.keys(errors).length) return res.status(400).json({ error: errors });
+
+    return res.status(200).json({ deletedCategory, success: 'Category deleted' })
   }
 }

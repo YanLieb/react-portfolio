@@ -37,7 +37,7 @@ export default class ProjectForm {
         const formData = new FormData(form);
         const formObject = Object.fromEntries(formData.entries()) as Record<string, FormDataEntryValue | FormDataEntryValue[]>;
         formObject.categories = formData.getAll('categories').filter(Boolean);
-        const url = formObject.id ? `/project/${formObject.id}` : '/project';
+        const url = formObject.id ? `/projects/${formObject.id}` : '/projects';
         const method = formObject.id ? 'PATCH' : 'POST';
 
         const response = await fetch(url, {
@@ -57,17 +57,39 @@ export default class ProjectForm {
           throw new Error('Please check errors above and try again')
         }
 
-        if (formObject.id) {
-          const keepEditing = window.confirm(`${result.success}! Keep editing ?`);
-          keepEditing ? window.location.assign(`/project/${formObject.slug}`) : window.location.assign('/project');
-        } else {
-          const addNew = window.confirm(`${result.success}! Add a new project ?`);
-          addNew ? window.location.assign('/project/new') : window.location.assign('/project');
-        }
+        window.alert(result.success);
+        window.location.assign('/projects');
 
       } catch (err) {
         console.warn(err)
       }
     })
+  }
+
+  deleteProjectFromList() {
+    const deleteBtns: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.project-list .delete-btn');
+    deleteBtns.length && deleteBtns.forEach((btn: HTMLButtonElement) => {
+      const id = btn.dataset.id;
+      if (!id) return;
+
+      btn.addEventListener('click', async (e) => {
+        await this.deleteProjectEvent(id);
+      })
+    })
+  }
+
+  async deleteProjectEvent(id: string) {
+    const shouldDelete = window.confirm('Delete this project?');
+    if (!shouldDelete) return;
+
+    const res = await fetch(`/projects/${id}`, { method: 'DELETE' });
+    const payload = await res.json();
+
+    if (payload.error) {
+      window.alert(payload.error)
+    } else {
+      const confirmDelete = window.confirm(payload.success)
+      if (confirmDelete) window.location.reload();
+    }
   }
 }
