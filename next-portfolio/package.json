@@ -10,17 +10,23 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "@remixicon/react": "^4.6.0",
+    "clsx": "^2.1.1",
+    "geist": "^1.5.1",
+    "next": "15.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.5.4"
+    "tailwind-merge": "^3.3.1",
+    "tailwind-variants": "^3.1.1"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@biomejs/biome": "2.2.0",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/postcss": "^4.1.14",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "@biomejs/biome": "2.2.0"
+    "tailwindcss": "^4.1.14",
+    "typescript": "^5"
   }
 }
