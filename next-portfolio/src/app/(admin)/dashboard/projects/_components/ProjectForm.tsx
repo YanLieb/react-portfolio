@@ -68,7 +68,7 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
       const validatedData = projectSchema.parse(formData);
 
       const response = await fetch('/api/projects', {
-        method: 'POST',
+        method: mode === 'new' ? 'POST' : 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
