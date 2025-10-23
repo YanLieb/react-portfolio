@@ -4,22 +4,54 @@ import { ZodError } from 'zod';
 import Project from '@/models/Project';
 import { projectSchema } from '@/schemas/project.schema';
 
-export async function PATCH(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
+) {
   try {
     await dbConnect();
 
+    const { slug } = await params;
     const body = await request.json();
-    const validateData = projectSchema.parse(body);
+    const validatedData = projectSchema.parse(body);
 
-    const project = await Project.findOneAndUpdate({slug: params.slug }, validateData)
+    const existingProject = await Project.findOne({ slug });
+
+    if (!existingProject) {
+      return NextResponse.json(
+        { error: 'Project not found' },
+        { status: 404 }
+      );
+    }
+
+    if (
+      validatedData.slug &&
+      validatedData.slug !== slug
+    ) {
+      const slugConflict = await Project.exists({
+        slug: validatedData.slug,
+        _id: { $ne: existingProject._id },
+      });
+
+      if (slugConflict) {
+        return NextResponse.json(
+          { error: 'A project with this slug already exists' },
+          { status: 409 }
+        );
+      }
+    }
+
+    const updatedProject = await Project.findOneAndUpdate(
+      { _id: existingProject._id },
+      validatedData,
+      { new: true, runValidators: true }
+    );
 
     return NextResponse.json(
-      { message: 'Project updated successfully', project },
+      { message: 'Project updated successfully', project: updatedProject },
       { status: 200 }
     );
-  }
-  catch (error: any) {
-    // Handle Zod validation errors
+  } catch (error: any) {
     if (error instanceof ZodError) {
       const errors = error.issues.map((err) => ({
         field: err.path.join('.'),
@@ -31,26 +63,29 @@ export async function PATCH(request: NextRequest, { params }: { params: { slug: 
       );
     }
 
-    console.error('Error creating project:', error);
+    console.error('Error updating project:', error);
     return NextResponse.json(
-      { error: 'Failed to create project' },
+      { error: 'Failed to update project' },
       { status: 500 }
     );
   }
 }
 
 export async function GET(
-  request: Request,
-  { params }: { params: { slug: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   await dbConnect();
 
-  const { slug } = params;
+  const { slug } = await params;
   const project = await Project.findOne({ slug });
 
   if (!project) {
-    return Response.json({ error: 'No project with this slug' }, { status: 404 });
+    return NextResponse.json(
+      { error: 'No project with this slug' },
+      { status: 404 }
+    );
   }
-  return Response.json(project);
-  
+
+  return NextResponse.json(project);
 }

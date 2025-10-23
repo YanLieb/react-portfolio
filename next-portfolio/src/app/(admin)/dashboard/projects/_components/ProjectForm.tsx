@@ -67,7 +67,14 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
       // Client-side validation with Zod
       const validatedData = projectSchema.parse(formData);
 
-      const response = await fetch('/api/projects', {
+      if (mode !== 'new' && !slug) {
+        setMessage({ type: 'error', text: 'Missing project identifier for update.' });
+        return;
+      }
+
+      const fetchPath = mode === 'new' ? '/api/projects' : `/api/projects/${slug}`;
+
+      const response = await fetch(fetchPath, {
         method: mode === 'new' ? 'POST' : 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -92,8 +99,14 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
         return;
       }
 
-      setMessage({ type: 'success', text: 'Project created successfully!' });
-      setFormData({ title: '', slug: '', description: '', link: '' });
+      setMessage({
+        type: 'success',
+        text: mode === 'new' ? 'Project created successfully!' : 'Project updated successfully!',
+      });
+
+      if (mode === 'new') {
+        setFormData({ title: '', slug: '', description: '', link: '' });
+      }
     } catch (error) {
       if (error instanceof ZodError) {
         // Handle client-side validation errors
