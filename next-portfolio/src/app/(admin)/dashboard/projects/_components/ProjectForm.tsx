@@ -11,13 +11,6 @@ interface ProjectFormInterface {
   slug: string
 }
 
-interface FormDataInterface {
-  title: string,
-  slug: string,
-  description: string,
-  link: string
-}
-
 export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
   
   const [formData, setFormData] = useState<ProjectFormData>({
