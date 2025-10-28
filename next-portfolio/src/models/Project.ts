@@ -1,6 +1,6 @@
 import mongoose, { Schema, model, models } from 'mongoose';
 
-export interface IProject {
+export interface ProjectInterface {
   title: string;
   slug: string;
   description: string;
@@ -9,7 +9,7 @@ export interface IProject {
   updatedAt?: Date;
 }
 
-const ProjectSchema = new Schema<IProject>(
+const ProjectModel = new Schema<ProjectInterface>(
   {
     title: {
       type: String,
@@ -40,6 +40,6 @@ const ProjectSchema = new Schema<IProject>(
 );
 
 // Prevent model compilation error in development
-const Project = models.Project || model<IProject>('Project', ProjectSchema);
+const Project = models.Project || model<ProjectInterface>('Project', ProjectModel);
 
 export default Project;

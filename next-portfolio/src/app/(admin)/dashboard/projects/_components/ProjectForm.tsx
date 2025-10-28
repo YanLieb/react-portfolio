@@ -1,4 +1,5 @@
 import { useState, FormEvent, useEffect } from 'react';
+import Link from 'next/link';
 import { Label } from '@/components/Label';
 import { Input } from '@/components/Input';
 import { Textarea } from '@/components/Textarea';
@@ -66,9 +67,16 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
       }
 
       const fetchPath = mode === 'new' ? '/api/projects' : `/api/projects/${slug}`;
+      let fetchMethod = 'POST';
+      
+      if (mode === 'delete') {
+        fetchMethod = 'DELETE'
+      } else if (mode === 'edit') {
+        fetchMethod = 'PATCH'
+      }
 
       const response = await fetch(fetchPath, {
-        method: mode === 'new' ? 'POST' : 'PATCH',
+        method: fetchMethod,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -206,6 +214,7 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
             <p className="mt-1 text-sm text-red-600">{fieldErrors.link}</p>
           )}
         </div>
+        <div className="flex gap-4">
         <Button type="submit" disabled={isLoading}>
           {mode === "new" ?
             isLoading ? 'Saving...' : 'Save project'
@@ -213,6 +222,10 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
             isLoading ? 'Updating...' : 'Update project'
           }
         </Button>
+        <Button variant="destructive" isLoading={isLoading} asChild>
+            <Link href={`?mode=delete&slug=${formData.slug}`}>Delete</Link>
+          </Button>
+        </div>
       </form>
     </div>
   )

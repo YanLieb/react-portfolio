@@ -6,12 +6,12 @@ import { projectSchema } from '@/schemas/project.schema';
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: { slug: string } }
 ) {
   try {
     await dbConnect();
 
-    const { slug } = await params;
+    const { slug } = params;
     const body = await request.json();
     const validatedData = projectSchema.parse(body);
 
@@ -73,11 +73,11 @@ export async function PATCH(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: { slug: string } }
 ) {
   await dbConnect();
 
-  const { slug } = await params;
+  const { slug } = params;
   const project = await Project.findOne({ slug });
 
   if (!project) {
@@ -88,4 +88,26 @@ export async function GET(
   }
 
   return NextResponse.json(project);
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { slug: string } }
+) {
+  await dbConnect();
+
+  const { slug } = params;
+  const deleteResult = await Project.deleteOne({ slug });
+
+  if (deleteResult.deletedCount === 0) {
+    return NextResponse.json(
+      { error: 'No project with this slug' },
+      { status: 404 }
+    );
+  }
+
+  return NextResponse.json(
+    { success: 'Project deleted' },
+    { status: 200 }
+  );
 }
