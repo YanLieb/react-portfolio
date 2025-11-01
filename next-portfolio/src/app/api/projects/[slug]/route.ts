@@ -97,6 +97,7 @@ export async function DELETE(
   await dbConnect();
 
   const { slug } = params;
+
   const deleteResult = await Project.deleteOne({ slug });
 
   if (deleteResult.deletedCount === 0) {

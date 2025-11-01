@@ -48,10 +48,21 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
     }
   }
 
-  const postProject = async (validatedData: ProjectFormData, mode: string, slug: string) => {
+  const setErrors = (dataErrors: Array<{ field: string, message: string }>) => {
+    const errors: Record<string, string> = {};
+    dataErrors.forEach((err: { field: string; message: string }) => {
+      errors[err.field] = err.message;
+    });
+    setFieldErrors(errors);
+    setMessage({ type: 'error', text: 'Please fix the errors below' });
+  }
+
+  const saveProject = async (validatedData: ProjectFormData, mode: string, slug: string) => {
+    setIsLoading(true)
+
     try {
       const fetchPath = mode === 'new' ? '/api/projects' : `/api/projects/${slug}`;
-      
+
       const response = await fetch(fetchPath, {
         method: mode === 'new' ? 'POST' : 'PATCH',
         headers: {
@@ -64,14 +75,9 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
 
       if (!response.ok) {
         if (data.errors) {
-          const errors: Record<string, string> = {};
-          data.errors.forEach((err: { field: string; message: string }) => {
-            errors[err.field] = err.message;
-          });
-          setFieldErrors(errors);
-          setMessage({ type: 'error', text: 'Please fix the errors below' });
+          setErrors(data.errors)
         } else {
-          throw new Error(data.error || 'Failed to create project');
+          throw new Error(data.error || 'Failed to save project');
         }
         return;
       }
@@ -108,18 +114,64 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
     }
   }
 
-  useEffect(() => {
-    if (mode === "edit" && slug) {
-      fetchProject()
+  const deleteProject = async (slug: string) => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(`/api/projects/${slug}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.errors) {
+          setErrors(data.errors)
+        } else {
+          throw new Error(data.error || 'Failed to delete project');
+        }
+        return;
+      }
+
+      setMessage({
+        type: 'success',
+        text: 'Project deleted successfully!',
+      });
+
+      setTimeout(() => {
+        window.location.replace('/dashboard/projects')
+      }, 1000)
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'An error occurred'
+      });
+    } finally {
+      setIsLoading(false)
     }
-  }, [mode, slug])
+  }
+
+  useEffect(() => {
+    if (slug) {
+      fetchProject();
+    }
+
+    const deleteButton = document.querySelector('.delete-btn');
+
+    deleteButton && deleteButton.addEventListener('click', () => {
+      window.alert('Are you sure you want to delete this project?')
+      deleteProject(slug)
+    })
+  }, [slug])
 
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validatedData = projectSchema.parse(formData);
-    postProject(validatedData, mode, slug);
+    saveProject(validatedData, mode, slug);
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -214,8 +266,8 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
             }
           </Button>
           {mode !== 'new' && (
-            <Button variant="destructive" isLoading={isLoading} asChild>
-              <Link href={`?mode=delete&slug=${formData.slug}`}>Delete</Link>
+            <Button variant="destructive" isLoading={isLoading} className="delete-btn">
+              Delete
             </Button>
           )}
         </div>
