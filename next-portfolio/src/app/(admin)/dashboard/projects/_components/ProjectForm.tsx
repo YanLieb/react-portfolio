@@ -1,18 +1,15 @@
 import { useState, FormEvent, useEffect } from 'react';
 import Link from 'next/link';
+import { ZodError } from 'zod';
+
 import { Label } from '@/components/Label';
 import { Input } from '@/components/Input';
 import { Textarea } from '@/components/Textarea';
 import { Button } from '@/components/Button';
+
 import { projectSchema, ProjectFormData } from '@/schemas/project.schema';
-import { ZodError } from 'zod';
 
-interface ProjectFormInterface {
-  mode: string,
-  slug: string
-}
-
-export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
+export default function ProjectForm({ mode, slug }: { mode: string, slug: string }) {
 
   const [formData, setFormData] = useState<ProjectFormData>({
     title: '',
@@ -157,13 +154,6 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
     if (slug) {
       fetchProject();
     }
-
-    const deleteButton = document.querySelector('.delete-btn');
-
-    deleteButton && deleteButton.addEventListener('click', () => {
-      window.alert('Are you sure you want to delete this project?')
-      deleteProject(slug)
-    })
   }, [slug])
 
 
@@ -171,7 +161,7 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
     e.preventDefault();
 
     const validatedData = projectSchema.parse(formData);
-    saveProject(validatedData, mode, slug);
+    saveProject(validatedData, mode, slug)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -179,8 +169,24 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleDeleteProject = (slug: string) => {
+    const shouldDelete = window.confirm('Are you sure you want to delete this project?');
+    if (!shouldDelete) return;
+    deleteProject(slug)
+  }
+
   return (
     <div>
+      <h1 className='my-4 text-center text-xl'>
+        {mode === 'new' ? (
+          'New Project'
+        ) : (
+          'Update Project'
+        )}
+      </h1>
+      <Button variant='secondary' asChild className='mb-5'>
+        <Link href='/dashboard/projects'>Back to project list</Link>
+      </Button>
       <form onSubmit={handleSubmit}>
         {message && (
           <div className={`mb-4 p-4 rounded ${message.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
@@ -266,7 +272,7 @@ export default function ProjectForm({ mode, slug }: ProjectFormInterface) {
             }
           </Button>
           {mode !== 'new' && (
-            <Button variant="destructive" isLoading={isLoading} className="delete-btn">
+            <Button variant="destructive" isLoading={isLoading} onClick={() => handleDeleteProject(formData.slug)}>
               Delete
             </Button>
           )}
