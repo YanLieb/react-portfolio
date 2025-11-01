@@ -77,7 +77,7 @@ export async function GET(
 ) {
   await dbConnect();
 
-  const { slug } = params;
+  const { slug } = await params;
   const project = await Project.findOne({ slug });
 
   if (!project) {
