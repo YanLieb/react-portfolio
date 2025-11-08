@@ -31,7 +31,7 @@ export default function CategoryList() {
   const deleteCategory = async (slug: string) => {
     setIsLoading(true)
     try {
-      const response = await fetch(`/api/category/${slug}`, {
+      const response = await fetch(`/api/categories/${slug}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ export default function CategoryList() {
       });
 
       setTimeout(() => {
-        window.location.replace('/dashboard/category')
+        window.location.replace('/dashboard/categories')
       }, 1000)
     } catch (error) {
       setMessage({
