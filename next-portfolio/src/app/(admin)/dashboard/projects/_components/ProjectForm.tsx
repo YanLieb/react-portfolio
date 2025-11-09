@@ -6,8 +6,11 @@ import { Label } from '@/components/Label';
 import { Input } from '@/components/Input';
 import { Textarea } from '@/components/Textarea';
 import { Button } from '@/components/Button';
+import { ToggleGroup, ToggleGroupItem } from '@/components/Toggle';
 
 import { projectSchema, ProjectFormData } from '@/schemas/project.schema';
+import { CategoryList_CategoryInterface } from '@/app/(admin)/dashboard/categories/_components/CategoryList';
+
 
 export default function ProjectForm({ mode, slug }: { mode: string, slug: string }) {
 
@@ -16,10 +19,33 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
     slug: '',
     description: '',
     link: '',
+    categories: []
   });
+  
+  const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  const fetchCategories = async () => {
+    setIsLoading(true);
+    try {
+
+      const response = await fetch(`/api/categories/`)
+
+      if (!response.ok) throw new Error('Failed to fetch categories')
+
+      const data = await response.json();
+
+      console.log(data)
+
+      setCategories(data.categories);
+    } catch (err) {
+      console.error('error fetching category list : ', err)
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   const fetchProject = async () => {
     setIsLoading(true);
@@ -36,7 +62,8 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
         title: project.title,
         slug: project.slug,
         description: project.description,
-        link: project.link
+        link: project.link,
+        categories: project.categories
       });
     } catch (e) {
       console.error('Error fetching project: ', e)
@@ -151,8 +178,10 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
   }
 
   useEffect(() => {
+    fetchCategories();
     if (slug) {
       fetchProject();
+
     }
   }, [slug])
 
@@ -160,14 +189,41 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const validatedData = projectSchema.parse(formData);
-    saveProject(validatedData, mode, slug)
+    try {
+      const validatedData = projectSchema.parse(formData);
+      setFieldErrors({});
+      setMessage(null);
+      saveProject(validatedData, mode, slug)
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const errors: Record<string, string> = {};
+        error.issues.forEach(issue => {
+          const field = issue.path[0];
+          if (field) errors[field.toString()] = issue.message;
+        });
+        setFieldErrors(errors)
+        setMessage({ type: 'error', text: 'Please fix the errors below' });
+        return;
+      }
+
+      setMessage({
+        type: 'error',
+        text: error instanceof Error ? error.message : 'An error occured'
+      })
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
+  
+  const handleCategoriesChange = (values: string[]) => {
+    setFormData(prev => ({ ...prev, categories: values }))
+    if (fieldErrors.categories) {
+      setFieldErrors(prev => ({...prev, categories: ''}))
+    }
+  }
 
   const handleDeleteProject = (slug: string) => {
     const shouldDelete = window.confirm('Are you sure you want to delete this project?');
@@ -261,6 +317,19 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
           />
           {fieldErrors.link && (
             <p className="mt-1 text-sm text-red-600">{fieldErrors.link}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <Label htmlFor='categories' className='font-medium block mb-3'>Categories</Label>
+          <ToggleGroup type="multiple" value={formData.categories} onValueChange={handleCategoriesChange}>
+              {categories.map((category: CategoryList_CategoryInterface) => (
+                <ToggleGroupItem key={category._id} value={category._id}>
+                  {category.title}
+                </ToggleGroupItem>
+              ))}
+          </ToggleGroup>
+          {fieldErrors.categories && (
+            <p className="mt-1 text-sm text-red-600">{fieldErrors.categories}</p>
           )}
         </div>
         <div className="flex gap-4">

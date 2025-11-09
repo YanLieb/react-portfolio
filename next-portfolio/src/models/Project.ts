@@ -1,10 +1,11 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, Types, model, models } from 'mongoose';
 
 export interface ProjectInterface {
   title: string;
   slug: string;
   description: string;
   link: string;
+  categories: Types.ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -33,6 +34,11 @@ const ProjectModel = new Schema<ProjectInterface>(
       required: [true, 'Please provide a project link'],
       trim: true,
     },
+    categories: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Category',
+      required: [true, 'Please select at least one category']
+    }
   },
   {
     timestamps: true,

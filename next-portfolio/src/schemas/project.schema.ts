@@ -33,6 +33,13 @@ export const projectSchema = z.object({
       hostname: z.regexes.domain,
       message: 'Must be a valid URL with a proper domain (e.g., https://example.com)',
     }),
+  categories: z
+    .array(
+      z
+        .string()
+        .regex(/^[a-f\d]{24}$/i, 'Category id must be a Mongo ObjectId'),
+    )
+    .nonempty('Pick at least one category'),
 });
 
 // Export the TypeScript type inferred from the schema

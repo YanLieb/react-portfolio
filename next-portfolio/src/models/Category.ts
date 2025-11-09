@@ -3,8 +3,6 @@ import mongoose, { Schema, model, models } from 'mongoose';
 export interface CategoryInterface {
   title: string;
   slug: string;
-  description: string;
-  link: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

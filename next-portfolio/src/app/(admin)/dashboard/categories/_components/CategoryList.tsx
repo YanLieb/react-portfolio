@@ -7,9 +7,7 @@ import { Button } from '@/components/Button';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFoot,
   TableHead,
   TableHeaderCell,
   TableRoot,
@@ -17,7 +15,7 @@ import {
 } from "@/components/Table"
 
 
-interface CategoryList_CategoryInterface extends CategoryInterface {
+export interface CategoryList_CategoryInterface extends CategoryInterface {
   _id: string;
 }
 
