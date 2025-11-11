@@ -1,4 +1,3 @@
-import { signIn } from "auth"
 import { redirect } from "next/navigation"
 
 
