@@ -1,14 +1,7 @@
 import { signIn } from "auth"
+import { redirect } from "next/navigation"
 
-export default function Dashboard() {
-  return (
-    <form
-      action={async () => {
-        "use server"
-        await signIn("google")
-      }}
-    >
-      <button type="submit">Signin with Google</button>
-    </form>
-  )
+
+export default async function Dashboard() {
+  redirect("/dashboard/projects")
 }
