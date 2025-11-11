@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 import dbConnect from '@/lib/mongodb';
 import Project from '@/models/Project';
+import '@/models/Category';
 import { projectSchema } from '@/schemas/project.schema';
 
 export async function POST(request: NextRequest) {
@@ -53,7 +54,7 @@ export async function GET() {
   try {
     await dbConnect();
 
-    const projects = await Project.find({}).sort({ createdAt: -1 });
+    const projects = await Project.find({}).sort({ createdAt: -1 }).populate('categories', 'title slug');
 
     return NextResponse.json(
       { projects },

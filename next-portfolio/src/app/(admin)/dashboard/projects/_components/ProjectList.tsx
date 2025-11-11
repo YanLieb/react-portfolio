@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 
 import { ProjectInterface } from '@/models/Project';
+import { CategoryInterface } from '@/models/Category';
 
 import { Button } from '@/components/Button';
 import {
@@ -17,16 +18,15 @@ import {
 } from "@/components/Table"
 
 
-interface ProjectList_ProjectInterface extends ProjectInterface {
+type ProjectWithCategories = Omit<ProjectInterface, 'categories'> & {
   _id: string;
-}
+  categories: Array<CategoryInterface & { _id: string }>;
+};
 
 export default function ProjectList() {
   const [projectList, setProjectList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-
-
 
   const deleteProject = async (slug: string) => {
     setIsLoading(true)
@@ -109,13 +109,17 @@ export default function ProjectList() {
           <TableHead>
             <TableRow>
               <TableHeaderCell>Project title</TableHeaderCell>
+              <TableHeaderCell>Categories</TableHeaderCell>
               <TableHeaderCell className='flex gap-4 justify-end'>Actions</TableHeaderCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {projectList.length > 0 && projectList.map((project: ProjectList_ProjectInterface) => (
+            {projectList.length > 0 && projectList.map((project: ProjectWithCategories) => (
               <TableRow key={project._id}>
                 <TableCell>{project.title}</TableCell>
+                <TableCell>
+                  {project.categories && project.categories.map((category) => category.title).join(' - ')}
+                </TableCell>
                 <TableCell className='flex gap-4 justify-end'>
                   <Button variant="secondary" isLoading={isLoading} asChild>
                     <Link href={`?mode=edit&slug=${project.slug}`}>Edit</Link>
