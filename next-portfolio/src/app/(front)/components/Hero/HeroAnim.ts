@@ -66,7 +66,7 @@ export default class HeroAnim {
           x: 0,
           ease: "back.out"
         }, "<0.5")
-        .to(".hero__logo svg", {
+        .to(".hero__logo img", {
           yPercent: -140,
           autoAlpha: 1,
           duration: 0.5,
