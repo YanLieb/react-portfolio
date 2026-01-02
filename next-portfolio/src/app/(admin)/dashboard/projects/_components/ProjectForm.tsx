@@ -1,12 +1,13 @@
 import { useState, FormEvent, useEffect } from 'react';
 import Link from 'next/link';
 import { ZodError } from 'zod';
+import slugify from 'slug';
 
 import { Label } from '@/components/Label';
 import { Input } from '@/components/Input';
-import { Textarea } from '@/components/Textarea';
 import { Button } from '@/components/Button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/Toggle';
+import Tiptap from '@/components/Tiptap';
 
 import { projectSchema, ProjectFormData } from '@/schemas/project.schema';
 import { CategoryList_CategoryInterface } from '@/app/(admin)/dashboard/categories/_components/CategoryList';
@@ -36,8 +37,6 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
       if (!response.ok) throw new Error('Failed to fetch categories')
 
       const data = await response.json();
-
-      console.log(data)
 
       setCategories(data.categories);
     } catch (err) {
@@ -181,7 +180,6 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
     fetchCategories();
     if (slug) {
       fetchProject();
-
     }
   }, [slug])
 
@@ -215,7 +213,15 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => {
+      const newData = { ...prev, [name]: value };
+      if (name === 'title') newData.slug = slugify(value);
+      return newData;
+    });
+  };
+
+  const handleDescriptionChange = (content: string) => {
+    setFormData(prev => ({ ...prev, description: content }));
   };
   
   const handleCategoriesChange = (values: string[]) => {
@@ -288,14 +294,9 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
           <Label htmlFor="description" className="font-medium">
             Description
           </Label>
-          <Textarea
-            id="description"
-            name="description"
-            placeholder="Project description"
-            className="mt-2"
+          <Tiptap
             value={formData.description}
-            onChange={handleChange}
-            required
+            onChange={handleDescriptionChange}
           />
           {fieldErrors.description && (
             <p className="mt-1 text-sm text-red-600">{fieldErrors.description}</p>

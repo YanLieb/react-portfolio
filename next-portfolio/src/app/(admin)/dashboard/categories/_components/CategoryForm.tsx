@@ -1,10 +1,10 @@
 import { useState, FormEvent, useEffect } from 'react';
 import Link from 'next/link';
 import { ZodError } from 'zod';
+import slugify from 'slug';
 
 import { Label } from '@/components/Label';
 import { Input } from '@/components/Input';
-import { Textarea } from '@/components/Textarea';
 import { Button } from '@/components/Button';
 
 import { categorySchema, CategoryFormData } from '@/schemas/category.schema';
@@ -162,7 +162,11 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => {
+      const newData = { ...prev, [name]: value };
+      if (name === 'title') newData.slug = slugify(value);
+      return newData;
+    });
   };
 
   const handleDeleteCategory = (slug: string) => {
