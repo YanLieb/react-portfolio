@@ -1,36 +1,21 @@
 "use client"
 
-import { useRef } from 'react';
-
-import { gsap } from 'gsap';
-import { ScrollTrigger, ScrollSmoother } from 'gsap/all';
-import { useGSAP } from '@gsap/react';
+import dynamic from 'next/dynamic'
 
 import Header from './(front)/Header/Header';
 import Hero from './(front)/Hero/Hero';
 import ProjectsList from './(front)/Projects/ProjectList';
 import Contact from './(front)/Contact/Contact';
-import Bubbles from "./(front)/Projects/inc/Bubbles";
-
 import "./front.css";
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+const Bubbles = dynamic(() => import("./(front)/components/Bubbles"), { ssr: false });
+const GsapSmoother = dynamic(() => import('./(front)/components/GsapSmoother'), { ssr: false })
 
 export default function Home() {
-  const mainContainer = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    ScrollSmoother.create({
-      smooth: 1.5,
-      effects: true,
-      smoothTouch: 0.2
-    })
-  }, { scope: mainContainer })
-
   return (
-    <div ref={mainContainer} id="smooth-wrapper">
+    <GsapSmoother>
       <Header />
-      <div id="smooth-content" className="home relative">
+      <div className="home relative">
         <Bubbles
           className="cursor-anim-wrapper"
           fade={30}
@@ -42,6 +27,6 @@ export default function Home() {
           <Contact />
         </Bubbles>
       </div>
-    </div>
+    </GsapSmoother>
   )
 }
