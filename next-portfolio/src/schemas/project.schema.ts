@@ -33,6 +33,8 @@ export const projectSchema = z.object({
       hostname: z.regexes.domain,
       message: 'Must be a valid URL with a proper domain (e.g., https://example.com)',
     }),
+  featured: z
+    .boolean().default(false),
   categories: z
     .array(
       z

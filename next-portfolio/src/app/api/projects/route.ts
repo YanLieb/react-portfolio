@@ -50,11 +50,19 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await dbConnect();
 
-    const projects = await Project.find({}).sort({ createdAt: -1 }).populate('categories', 'title slug');
+    const { searchParams } = new URL(request.url);
+    const featured = searchParams.get('featured');
+
+    const filter: { featured?: boolean } = {};
+    if (featured === 'true') {
+      filter.featured = true;
+    }
+
+    const projects = await Project.find(filter).sort({ createdAt: -1 }).populate('categories', 'title slug');
 
     return NextResponse.json(
       { projects },

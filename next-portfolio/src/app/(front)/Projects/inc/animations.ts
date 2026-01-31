@@ -120,15 +120,15 @@ export function projectsListSlider(container: HTMLDivElement | null, onSlideChan
       if (isAnimating) return;
 
       const target = self.event.target as HTMLElement;
-      if (target.closest('.projects__next-btn')) {
+      if (target.closest('.projectList__next-btn')) {
         slide(currentIndex + 1);
-      } else if (target.closest('.projects__prev-btn')) {
+      } else if (target.closest('.projectList__prev-btn')) {
         slide(currentIndex - 1);
       }
 
-      const menuEntries = document.querySelectorAll('.projects__menu .projects__menu-item');
+      const menuEntries = document.querySelectorAll('.projectMenu .projectMenu__item');
       menuEntries.forEach((entry, index) => {
-        if (target.closest('.projects__menu-item') === entry) {
+        if (target.closest('.projectMenu__item') === entry) {
           if (index === currentIndex) return;
           slide(index);
         }
@@ -138,26 +138,15 @@ export function projectsListSlider(container: HTMLDivElement | null, onSlideChan
 }
 
 export function ProjectsListScrollTrigger() {
-  gsap.set(".projects__categories-menu__item, .projects__menu-item, .project__container,.projects__prev-btn, .projects__next-btn", {
+  gsap.set(".projectMenu__item, .project__container,.projectList__prev-btn, .projectList__next-btn", {
     autoAlpha: 0,
   });
 
-  gsap.to(".projects__categories-menu__item", {
+  gsap.to(".projectMenu__item", {
     autoAlpha: 1,
     stagger: 0.1,
     scrollTrigger: {
-      trigger: ".projects__categories-menu",
-      start: "top 95%",
-      end: "bottom 10%",
-      toggleActions: "play none none reverse",
-    }
-  })
-
-  gsap.to(".projects__menu-item", {
-    autoAlpha: 1,
-    stagger: 0.1,
-    scrollTrigger: {
-      trigger: ".projects__menu",
+      trigger: ".projectMenu",
       start: "top 90%",
       end: "bottom 10%",
       toggleActions: "play none none reverse",
@@ -177,7 +166,7 @@ export function ProjectsListScrollTrigger() {
     .to(".project__container", {
       autoAlpha: 1,
     })
-    .fromTo(".projects__next-btn, .projects__prev-btn", {
+    .fromTo(".projectList__next-btn, .projectList__prev-btn", {
       y: 50,
     }, {
       autoAlpha: 1,

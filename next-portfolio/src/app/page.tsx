@@ -6,11 +6,11 @@ import { gsap } from 'gsap';
 import { ScrollTrigger, ScrollSmoother } from 'gsap/all';
 import { useGSAP } from '@gsap/react';
 
-import Header from './(front)/components/Header/Header';
-import Hero from './(front)/components/Hero/Hero';
-import ProjectsList from './(front)/components/Projects/ProjectsList';
-import Contact from './(front)/components/Contact/Contact';
-import Bubbles from "./(front)/components/Projects/inc/Bubbles";
+import Header from './(front)/Header/Header';
+import Hero from './(front)/Hero/Hero';
+import ProjectsList from './(front)/Projects/ProjectList';
+import Contact from './(front)/Contact/Contact';
+import Bubbles from "./(front)/Projects/inc/Bubbles";
 
 import "./front.css";
 

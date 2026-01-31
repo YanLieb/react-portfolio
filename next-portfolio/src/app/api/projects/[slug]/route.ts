@@ -6,12 +6,12 @@ import { projectSchema } from '@/schemas/project.schema';
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     await dbConnect();
 
-    const { slug } = params;
+    const { slug } = await params;
     const body = await request.json();
     const validatedData = projectSchema.parse(body);
 
@@ -73,7 +73,7 @@ export async function PATCH(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   await dbConnect();
 
@@ -92,11 +92,11 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   await dbConnect();
 
-  const { slug } = params;
+  const { slug } = await params;
 
   const deleteResult = await Project.deleteOne({ slug });
 

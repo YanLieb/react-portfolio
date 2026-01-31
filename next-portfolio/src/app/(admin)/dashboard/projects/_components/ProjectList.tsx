@@ -91,6 +91,8 @@ export default function ProjectList() {
     fetchProjects();
   }, [])
 
+  console.log(projectList)
+
   return (
     <>
       <h1 className="my-4 text-center text-xl font-bold">Project List</h1>
@@ -110,6 +112,7 @@ export default function ProjectList() {
             <TableRow>
               <TableHeaderCell>Project title</TableHeaderCell>
               <TableHeaderCell>Categories</TableHeaderCell>
+              <TableHeaderCell>Featured</TableHeaderCell>
               <TableHeaderCell className='flex gap-4 justify-end'>Actions</TableHeaderCell>
             </TableRow>
           </TableHead>
@@ -119,6 +122,9 @@ export default function ProjectList() {
                 <TableCell>{project.title}</TableCell>
                 <TableCell>
                   {project.categories && project.categories.map((category) => category.title).join(' - ')}
+                </TableCell>
+                <TableCell>
+                  {project.featured && (<span>★</span>)}
                 </TableCell>
                 <TableCell className='flex gap-4 justify-end'>
                   <Button variant="secondary" isLoading={isLoading} asChild>

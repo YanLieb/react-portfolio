@@ -16,10 +16,9 @@ type ProjectProps = {
   id: string;
   category: string;
   projectData: ProjectData;
-  currentSlideIndex: number;
 };
 
-export default function Project({ id, category, projectData, currentSlideIndex }: ProjectProps) {
+export default function Project({ id, category, projectData }: ProjectProps) {
   const projectRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
@@ -48,10 +47,10 @@ export default function Project({ id, category, projectData, currentSlideIndex }
     })
 
 
-  }, { scope: projectRef, dependencies: [currentSlideIndex] });
+  }, { scope: projectRef });
 
   return (
-    <div id={id} ref={projectRef} className={`project category-${category} absolute h-full w-full flex justify-center items-center select-none`}>
+    <div id={id} ref={projectRef} key={id} className={`project category-${category} absolute h-full w-full flex justify-center items-center select-none`}>
       <div className="project__container w-75 md:w-120 flex flex-col justify-center gap-2">
         <h2 className="project__title font-normal text-center leading-12">{projectData.title}</h2>
         <div className="project__body flex flex-col gap-1">

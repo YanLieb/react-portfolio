@@ -7,6 +7,7 @@ import { Label } from '@/components/Label';
 import { Input } from '@/components/Input';
 import { Button } from '@/components/Button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/Toggle';
+import { Switch } from '@/components/Switch';
 import Tiptap from '@/components/Tiptap';
 
 import { projectSchema, ProjectFormData } from '@/schemas/project.schema';
@@ -20,9 +21,10 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
     slug: '',
     description: '',
     link: '',
-    categories: []
+    categories: [],
+    featured: false
   });
-  
+
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -62,7 +64,8 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
         slug: project.slug,
         description: project.description,
         link: project.link,
-        categories: project.categories
+        categories: project.categories,
+        featured: project.featured,
       });
     } catch (e) {
       console.error('Error fetching project: ', e)
@@ -223,12 +226,16 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
   const handleDescriptionChange = (content: string) => {
     setFormData(prev => ({ ...prev, description: content }));
   };
-  
+
   const handleCategoriesChange = (values: string[]) => {
     setFormData(prev => ({ ...prev, categories: values }))
     if (fieldErrors.categories) {
       setFieldErrors(prev => ({...prev, categories: ''}))
     }
+  }
+
+  const handleSwitch = (checked: boolean) => {
+    setFormData(prev => ({ ...prev, featured: checked }))
   }
 
   const handleDeleteProject = (slug: string) => {
@@ -332,6 +339,10 @@ export default function ProjectForm({ mode, slug }: { mode: string, slug: string
           {fieldErrors.categories && (
             <p className="mt-1 text-sm text-red-600">{fieldErrors.categories}</p>
           )}
+        </div>
+        <div className="mb-4">
+          <Label htmlFor='featured' className='font-medium block mb-3'>Featured project</Label>
+          <Switch id='featured' name='featured' checked={formData.featured} onCheckedChange={handleSwitch} />
         </div>
         <div className="flex gap-4">
           <Button type="submit" disabled={isLoading}>

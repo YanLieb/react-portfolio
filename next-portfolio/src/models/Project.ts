@@ -5,6 +5,7 @@ export interface ProjectInterface {
   slug: string;
   description: string;
   link: string;
+  featured: boolean;
   categories: Types.ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -38,6 +39,10 @@ const ProjectModel = new Schema<ProjectInterface>(
       type: [Schema.Types.ObjectId],
       ref: 'Category',
       required: [true, 'Please select at least one category']
+    },
+    featured: {
+      type: Boolean,
+      default: false,
     }
   },
   {
