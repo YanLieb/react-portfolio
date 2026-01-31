@@ -10,9 +10,8 @@ services:
     command: sh -c "npm install -g pnpm && pnpm install && pnpm build && pnpm start"
     depends_on:
       - database
-    environment:
-      - MONGODB_URI=mongodb://database:27017/portfolio
-      - NODE_ENV=production
+    env_file:
+      - .env
     restart: always
 
   database:
