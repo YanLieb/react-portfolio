@@ -19,12 +19,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // console.log(`[SignIn Attempt] Email: ${user.email} | Found in DB: ${!!existing} | Role: ${existing?.role}`);
         // if (user.email === "yannick.liebnau@gmail.com") return true;
 
-        if (!existing || existing.role !== "admin") {
+        if (!existing) {
           return "/login?error=AccessDenied"
         }
 
         return true
-      
+
     }
   }
 })
